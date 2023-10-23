@@ -148,7 +148,7 @@ limiter() {
 data_user() {
   cat_users=$(cat "/etc/passwd" | grep 'home' | grep 'false' | grep -v 'syslog' | grep -v '::/' | grep -v 'hwid\|token')
   [[ -z "$(echo "${cat_users}" | head -1)" ]] && print_center -verm2 "${a96:-NO REGISTERED SSH USERS}" && return 1
-  dat_us=$(printf '%-13s%-14s%-10s%-4s%-6s%s' "${a48:-User}" "${a49:-Pass}" "${a97:-Date}" "${a98:-Days}" 'Lmt' 'Stat')
+  dat_us=$(printf '%-13s%-14s%-10s%-4s%-6s%-5s%s' "${a48:-User}" "${a49:-Pass}" "${a97:-Date}" "${a98:-Days}" 'Lmt' 'Stat' 'Con')
   msg -azu "  $dat_us"
   msg -bar
 
@@ -174,27 +174,36 @@ data_user() {
       stat="$(msg -verm2 "BLK")"
     fi
 
-    Limit=$(echo "$line" | awk -F ':' '{print $5}' | cut -d ',' -f1)
+    Limit=$(echo "$line" | awk -F ':' '{print $5}' | cut-d ',' -f1)
     [[ "${#Limit}" = "1" ]] && Limit=$(printf '%2s%-4s' "$Limit") || Limit=$(printf '%-6s' "$Limit")
+
+    # Agregar la comprobación de usuario conectado usando 'who'
+    connected_status=""
+    if [[ $(who | grep -c "$u") -gt 0 ]]; then
+      connected_status="Conectado"
+    else
+      connected_status="Desconectado"
+    fi
 
     echo -ne "$(msg -verd "$i")$(msg -verm2 "-")$(msg -azu "${us}") $(msg -azu "${pass}")"
     if [[ $(echo $fecha | awk '{print $2}') = "" ]]; then
       exp="$(printf '%8s%-2s' '[X]')"
       exp+="$(printf '%-6s' '[X]')"
-      echo " $(msg -verm2 "$fecha")$(msg -verd "$exp")$(echo -e "$stat")"
+      echo " $(msg -verm2 "$fecha")$(msg -verd "$exp")$(echo -e "$stat")$(msg -verd "$connected_status")"
     else
       if [[ $(date +%s) -gt $(date '+%s' -d "${fecha}") ]]; then
         exp="$(printf '%-5s' "Exp")"
-        echo " $(msg -verm2 "$mes_dia/$ano")  $(msg -verm2 "$exp")$(msg -ama "$Limit")$(echo -e "$stat")"
+        echo " $(msg -verm2 "$mes_dia/$ano")  $(msg -verm2 "$exp")$(msg -ama "$Limit")$(msg -ama "$connected_status")$(echo -e "$stat")"
       else
         EXPTIME="$(($(($(date '+%s' -d "${fecha}") - $(date +%s))) / 86400))"
         [[ "${#EXPTIME}" = "1" ]] && exp="$(printf '%2s%-3s' "$EXPTIME")" || exp="$(printf '%-5s' "$EXPTIME")"
-        echo " $(msg -verm2 "$mes_dia/$ano")  $(msg -verd "$exp")$(msg -ama "$Limit")$(echo -e "$stat")"
+        echo " $(msg -verm2 "$mes_dia/$ano")  $(msg -verd "$exp")$(msg -ama "$Limit")$(msg -ama "$connected_status")$(echo -e "$stat")"
       fi
     fi
     let i++
   done <<<"$cat_users"
 }
+
 
 # ======== user Details ====
 
@@ -961,9 +970,9 @@ menu_udp_custom() {
   msg -bar3
   print_center -ama "${a12:-QUICK MENU}"
   msg -bar3
-  echo " $(msg -verd "[2]") $(msg -verm2 '>') $(msg -verd "${a6:-Create User}")"
-  echo " $(msg -verd "[3]") $(msg -verm2 '>') $(msg -verm2 "${a7:-Remove User}")"
-  echo " $(msg -verd "[4]") $(msg -verm2 '>') $(msg -ama "${a8:-Renew User}")"
+  echo " $(msg -verd "[2]") $(msg -verm2 '>') $(msg -verd "${a6:-Crear User}")"
+  echo " $(msg -verd "[3]") $(msg -verm2 '>') $(msg -verm2 "${a7:-Eliminar User}")"
+  echo " $(msg -verd "[4]") $(msg -verm2 '>') $(msg -ama "${a8:-Renovar User}")"
   echo " $(msg -verd "[5]") $(msg -verm2 '>') $(msg -blu "${a9:-Block/Unlock User}")"
   echo " $(msg -verd "[6]") $(msg -verm2 '>') $(msg -verm3 "${a10:-User Details}")"
   echo " $(msg -verd "[7]") $(msg -verm2 '>') $(msg -teal "${a11:-Limit Accounts}")"
