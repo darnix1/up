@@ -137,7 +137,7 @@ incertar_key() {
       done
       sleep 1s
       
-checking_sc
+
 
 # Resto del código para la instalación
 
@@ -175,7 +175,7 @@ checking_sc() {
 }
 
 
-
+checking_sc
 # // Checking Os Architecture
 if [[ $( uname -m | awk '{print $1}' ) == "x86_64" ]]; then
     echo -e "${OK} Your Architecture Is Supported ( ${green}$( uname -m )${NC} )"
