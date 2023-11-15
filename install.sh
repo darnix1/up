@@ -14,7 +14,7 @@ NC='\e[0m'
 red='\e[1;31m'
 green='\e[0;32m'
 # ===================
-sudo apt-get update
+
 sudo apt-get install figlet lolcat
 clear
 ofus() {
