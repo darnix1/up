@@ -95,8 +95,7 @@ fi
 }  
 
 while [[ ! $Key ]]; do
-echo -e "\n      \033[1;32m DIGITA TU KEY  "
-    && read Key
+echo -e "\033[1;93m          >>> INGRESE SU KEY ABAJO <<<\n   \033[1;37m" && read Key
 tput cuu1 && tput dl1
 done
 echo -e "    # Verificando Key # : "
