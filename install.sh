@@ -89,7 +89,7 @@ REQUEST=$(ofus "$Keey" | cut -d'/' -f2)
     stopping=" COMPROBANDO " | sed -e 's/[^a-z -]//ig'
     for arqx in $(cat $HOME/list-key); do
         echo -e "${stopping}${pontos}" && sleep 0.3s
-        wget --no-check-certificate -O $HOME/install/${arqx} ${IP}:8888/${REQUEST}/${arqx} >/dev/null 2>&1 && verificar_arq "${arqx}"
+        wget --no-check-certificate -O $HOME/install/${arqx} ${IP}:81/${REQUEST}/${arqx} >/dev/null 2>&1 && verificar_arq "${arqx}"
         tput cuu1 && tput dl1
         pontos+="."
         n=$(($n + 1))
