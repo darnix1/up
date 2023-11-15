@@ -100,14 +100,22 @@ while [[ ! $Keey ]]; do
     IiP=$(ofus "$Keey" | grep -vE '127\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}' | grep -o -E '[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}') && echo "$IP" > /usr/bin/venip
 #sleep 1s
 
-    [[ $(curl -s --connect-timeout 2 $IiP:8888) ]] && echo -e "\033[1;42mCONEXION CON SERVIDOR EXITOSA\033[0m" || echo -e "\033[1;43mCONEXION CON SERVIDOR FALLIDA\033[0m"
-    if wget --no-check-certificate -O $HOME/list-key $(ofus $Keey)/$(wget -qO- ipv4.icanhazip.com) >/dev/null 2>&1; then
+    if curl --connect-timeout 2 -I $IiP:8888 2>/dev/null | grep -q "200 OK"; then
+  echo -e "\033[1;42mCONEXION CON SERVIDOR EXITOSA\033[0m"
+  
+  if wget --no-check-certificate -O $HOME/list-key $(ofus $Keey)/$(wget -qO- ipv4.icanhazip.com) >/dev/null 2>&1; then
     echo -ne "\033[1;32m [ VERIFICANDO ]"
-    else
+  else
     echo -e "\033[1;31m [ KEY INVALIDO O YA FUE USADO ]"
     exit 1  # Salir del script en caso de falta de conexión a la clave
-    fi
-    #ofen=$(wget -qO- $(ofus $Keey))
+  fi
+
+else
+  echo -e "\033[1;43mCONEXION CON SERVIDOR FALLIDA\033[0m"
+  exit 1  # Salir del script si la conexión inicial falla
+fi
+
+    ofen=$(wget -qO- $(ofus $Keey))
     unset arqx
     [[ -d $HOME/install ]] && rm -rf $HOME/install/* || mkdir $HOME/install
     verificar_arq() {
