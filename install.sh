@@ -68,7 +68,11 @@ while [[ ! $Keey ]]; do
         tput cuu1 && tput dl1
     done
 REQUEST=$(ofus "$Keey" | cut -d'/' -f2)
-    echo -e "\n"                      "
+    echo -e "\n" 
+    echo -e " FILE Contend : ${REQUEST} $(echo ${REQUEST} | wc -c)"
+    echo -e "\n"
+    echo -e " VERIFICA, Si tu key Contiene \033[1;45m KEY DE ChumoGH! \033[0m "
+    echo -e "\n"
     IiP=$(ofus "$Keey" | grep -vE '127\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}' | grep -o -E '[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}')
     [[ $(curl -s --connect-timeout 2 $IiP:8888) ]] && echo -e "\033[1;42mCONEXION CON SERVIDOR EXITOSA\033[0m" || echo -e "\033[1;43mCONEXION CON SERVIDOR FALLIDA\033[0m"
     wget --no-check-certificate -O $HOME/list-key $(ofus $Keey)/$(wget -qO- ipv4.icanhazip.com) >/dev/null 2>&1 && echo -ne "\033[1;32m  [ VERIFICANDO ]" || echo -e "\033[1;31m [ No Existe Acceso al KEY ]" #&& echo -e "\033[1;32m [ Key  ]\n" || echo -e "\033[1;31m [ No Existe Acceso al KEY ]"
