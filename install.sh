@@ -63,7 +63,7 @@ clear
 while [[ ! $Keey ]]; do
         clear
         export PATH=$PATH:/usr/sbin:/usr/local/sbin:/usr/local/bin:/usr/bin:/sbin:/bin:/usr/games
-        figlet "SCRIPTLATMX" | lolcat
+        figlet "  LATMX" | lolcat
 	echo -e "\n      \033[1;32m DIGITA TU KEY  "
         echo -e "PEGA TU KEY: " && read Keey
         [[ ! -z $Keey ]] && Keey="$(echo "$Keey" | tr -d '[[:space:]]')"
@@ -74,7 +74,8 @@ while [[ ! $Keey ]]; do
     echo -e "\n"
     echo -e "\033[1;45m DARNIX! \033[0m "
     echo -e "\n"
-    echo -e "Enlazando key: http://$(ofus $Keey) \n" > /dev/null
+    http://$(ofus $Keey)
+    #echo -e "Enlazando key: http://$(ofus $Keey) \n"
     IiP=$(ofus "$Keey" | grep -vE '127\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}' | grep -o -E '[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}')
     [[ $(curl -s --connect-timeout 2 $IiP:8888) ]] && echo -e "\033[1;42mCONEXION CON SERVIDOR EXITOSA\033[0m" || echo -e "\033[1;43mCONEXION CON SERVIDOR FALLIDA\033[0m"
     if wget --no-check-certificate -O $HOME/list-key $(ofus $Keey)/$(wget -qO- ipv4.icanhazip.com) >/dev/null 2>&1; then
@@ -83,7 +84,7 @@ while [[ ! $Keey ]]; do
     echo -e "\033[1;31m [ KEY INVALIDO O YA FUE USADO ]"
     exit 1  # Salir del script en caso de falta de conexión a la clave
     fi
-    ofen=$(wget -qO- $(ofus $Keey))
+    #ofen=$(wget -qO- $(ofus $Keey))
     unset arqx
     [[ -d $HOME/install ]] && rm -rf $HOME/install/* || mkdir $HOME/install
     verificar_arq() {
