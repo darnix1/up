@@ -59,48 +59,85 @@ echo ""
 sleep 5
 clear
 ###### IZIN SC 
-#!/bin/bash
-while [[ ! $Keey ]]; do
-        clear
-        export PATH=$PATH:/usr/sbin:/usr/local/sbin:/usr/local/bin:/usr/bin:/sbin:/bin:/usr/games
-        figlet "  LATMX" | lolcat
-	echo -e "\n      \033[1;32m DIGITA TU KEY  "
-        echo -e "PEGA TU KEY: " && read Keey
-        [[ ! -z $Keey ]] && Keey="$(echo "$Keey" | tr -d '[[:space:]]')"
-        tput cuu1 && tput dl1
-    done
-    REQUEST=$(ofus "$Keey" | cut -d'/' -f2)
-    echo -e " Enlazando IP: ${REQUEST} $(echo ${REQUEST} | wc -c)"
-    echo -e "\n"
-    echo -e "\033[1;45m DARNIX! \033[0m "
-    echo -e "\n"
-    http://$(ofus $Keey)
-    #echo -e "Enlazando key: http://$(ofus $Keey) \n"
-    IiP=$(ofus "$Keey" | grep -vE '127\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}' | grep -o -E '[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}')
-    [[ $(curl -s --connect-timeout 2 $IiP:8888) ]] && echo -e "\033[1;42mCONEXION CON SERVIDOR EXITOSA\033[0m" || echo -e "\033[1;43mCONEXION CON SERVIDOR FALLIDA\033[0m"
-    if wget --no-check-certificate -O $HOME/list-key $(ofus $Keey)/$(wget -qO- ipv4.icanhazip.com) >/dev/null 2>&1; then
-    echo -ne "\033[1;32m [ VERIFICANDO ]"
-    else
-    echo -e "\033[1;31m [ KEY INVALIDO O YA FUE USADO ]"
-    exit 1  # Salir del script en caso de falta de conexión a la clave
-    fi
-    #ofen=$(wget -qO- $(ofus $Keey))
-    unset arqx
-    [[ -d $HOME/install ]] && rm -rf $HOME/install/* || mkdir $HOME/install
-    verificar_arq() {
-        echo "$1" >>$HOME/install/log.txt
+function_verify () {
+[[ $(dpkg --get-selections|grep -w "curl"|head -1) ]] || apt-get install curl -y &>/dev/null
+  permited=$(curl -sSL "https://raw.githubusercontent.com/DanssBot/DanBot/main/control")
+  [[ $(echo $permited|grep "${IP}") = "" ]] && {
+  clear
+  echo -e "\n\n\n\033[1;91m————————————————————————————————————————————————————\n      ¡ESTA KEY NO CONCUERDA CON EL INSTALADOR! \n      BOT: @CONECTEDMX_BOT \n————————————————————————————————————————————————————\n\n\n"
+  [[ -d /etc/VPS-MX ]] && rm -rf /etc/VPS-MX
+  exit 1
+  } || {
+  ### INTALAR VERSION DE SCRIPT
+  v1=$(curl -sSL "https://raw.githubusercontent.com/lacasitamx/version/master/vercion")
+  echo "$v1" > /etc/versin_script
+  }
+}
+
+invalid_key() {
+    msgi -bar2
+    msgi -bar2
+    sleep 3s
+    clear && clear
+    echo "Codificacion Incorrecta" >/etc/SCRIPT-LATAM/errorkey
+    msgi -bar2
+    [[ $1 = "" ]] && fun_idi || {
+      [[ ${#1} -gt 2 ]] && fun_idi || id="$1"
     }
-    n=1
-    IP=$(ofus "$Keey" | grep -vE '127\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}' | grep -o -E '[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}') && echo "$IP" >/usr/bin/vendor_code
-    pontos="."
-    stopping=" ANALIZANDO " | sed -e 's/[^a-z -]//ig'
-    for arqx in $(cat $HOME/list-key); do
-        echo -e "${stopping}${pontos}" && sleep 0.3s
-        wget --no-check-certificate -O $HOME/install/${arqx} ${IP}:81/${REQUEST}/${arqx} >/dev/null 2>&1 && verificar_arq "${arqx}"
+    echo -e "\033[1;31m    CIFRADO INVALIDO -- #¡La Key fue Invalida#! "
+    msgi -bar2
+    echo -ne "\033[1;97m DESEAS REINTENTAR CON OTRA KEY  \033[1;31m[\033[1;93m S \033[1;31m/\033[1;93m N \033[1;31m]\033[1;93m: \033[1;93m" && read incertar_key
+    [[ "$incertar_key" = "s" || "$incertar_key" = "S" ]] && incertar_key
+    clear && clear
+    msgi -bar2
+    msgi -bar2
+    echo -e "\033[1;97m          ---- INSTALACION CANCELADA  -----"
+    msgi -bar2
+    msgi -bar2
+    exit 1
+  }
+  verificar_arq() {
+        echo "$1" >>$HOME/lista-arq
+    }
+incertar_key() {
+
+    [[ -d /etc/SCRIPT-LATAM/errorkey ]] && rm -rf /etc/SCRIPT-LATAM/errorkey >/dev/null 2>&1
+    echo "By Kalix1" >/etc/SCRIPT-LATAM/errorkey
+    msgi -bar2
+    echo -ne "\033[1;96m          >>> INTRODUZCA LA KEY ABAJO <<<\n\033[1;31m   " && read Key
+    [[ -z "$Key" ]] && Key="NULL"
+    tput cuu1 && tput dl1
+    msgi -ne "    \033[1;93m# Verificando Key # : "
+    cd $HOME
+    IPL=$(cat /root/.ssh/authrized_key.reg)
+    wget -O $HOME/lista-arq $(ofus "$Key")/$IPL >/dev/null 2>&1 && echo -e "\033[1;32m Codificacion Correcta" || {
+      echo -e "\033[1;31m Codificacion Incorrecta"
+      invalid_key
+      exit
+    }
+    IP=$(ofus "$Key" | grep -vE '127\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}' | grep -o -E '[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}') && echo "$IP" >/usr/bin/vendor_code
+    sleep 1s
+    function_verify
+    updatedb
+    if [[ -e $HOME/lista-arq ]] && [[ ! $(cat /etc/SCRIPT-LATAM/errorkey | grep "Codificacion Incorrecta") ]]; then
+      msgi -bar2
+      msgi -verd " Ficheros Copiados \e[97m[\e[93m Key By @Panel_NetVPS_bot \e[97m]"
+      REQUEST=$(ofus "$Key" | cut -d'/' -f2)
+      [[ ! -d ${SCPinstal} ]] && mkdir ${SCPinstal}
+      pontos="."
+      stopping="Configurando Directorios"
+      for arqx in $(cat $HOME/lista-arq); do
+        msgi -verm "${stopping}${pontos}"
+        wget --no-check-certificate -O ${SCPinstal}/${arqx} ${IP}:81/${REQUEST}/${arqx} >/dev/null 2>&1 && verificar_arq "${arqx}" || {
+          error_fun
+          exit
+        }
         tput cuu1 && tput dl1
         pontos+="."
-        n=$(($n + 1))
-    done
+      done
+      sleep 1s
+      
+checking_sc
 
 # Resto del código para la instalación
 
