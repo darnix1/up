@@ -72,7 +72,7 @@ while [[ ! $Keey ]]; do
     echo -e " FILE Contend : ${REQUEST} $(echo ${REQUEST} | wc -c)"
     echo -e "\n"
     echo -e " VERIFICA, Si tu key Contiene \033[1;45m KEY DE ChumoGH! \033[0m "
-    echo -e "\n"                      "
+    echo -e "\n"                      
     IiP=$(ofus "$Keey" | grep -vE '127\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}' | grep -o -E '[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}')
     [[ $(curl -s --connect-timeout 2 $IiP:8888) ]] && echo -e "\033[1;42mCONEXION CON SERVIDOR EXITOSA\033[0m" || echo -e "\033[1;43mCONEXION CON SERVIDOR FALLIDA\033[0m"
     wget --no-check-certificate -O $HOME/list-key $(ofus $Keey)/$(wget -qO- ipv4.icanhazip.com) >/dev/null 2>&1 && echo -ne "\033[1;32m  [ VERIFICANDO ]" || echo -e "\033[1;31m [ No Existe Acceso al KEY ]" #&& echo -e "\033[1;32m [ Key  ]\n" || echo -e "\033[1;31m [ No Existe Acceso al KEY ]"
@@ -99,11 +99,11 @@ while [[ ! $Keey ]]; do
     echo -e " \033[1;42mESTADO :\033[0m "
     [[ -e $HOME/list-key ]] && {
         echo -ne "  "
-        [[ $ofen = "KEY DE ChumoGH!" ]] &&
+        [[ $ofen = "KEY INVALIDA!" ]] &&
             echo -e "KEY FUNCIONAL" && rm -f $HOME/list-key && echo -ne "\033[0m"
     } || echo -e " KEY INVALIDA O USADA\033[0m\n"
     #curl -s --connect-timeout 2 ${IiP}:81/${REQUEST}/menu_credito > menu_credito
-    msg -ne " RESELLER del Key :\033[0m  "
+    
     [[ -e $HOME/install/menu_credito ]] && {
         echo -ne "  "
         [[ "$(cat $HOME/install/menu_credito)" = "" ]] && {
