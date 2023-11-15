@@ -94,6 +94,24 @@ REQUEST=$(ofus "$Keey" | cut -d'/' -f2)
         pontos+="."
         n=$(($n + 1))
     done
+    echo -e " ---> ESTADO : \033[1;45m$ofen\033[0m  con "
+    [[ ! -e $HOME/install/log.txt ]] && touch $HOME/install/log.txt
+    echo " $(cat <$HOME/install/log.txt | wc -l) FILES " && rm -f $HOME/install/log.txt
+    echo -e " \033[1;42mESTADO :\033[0m "
+    [[ -e $HOME/list-key ]] && {
+        echo -e "  "
+        [[ $ofen = "KEY DE ChumoGH!" ]] &&
+            echo -e "KEY FUNCIONAL" && rm -f $HOME/list-key && echo -ne "\033[0m"
+    } || echo -e " KEY INVALIDA O USADA\033[0m\n"
+    #curl -s --connect-timeout 2 ${IiP}:81/${REQUEST}/menu_credito > menu_credito
+    echo -e " RESELLER del Key :\033[0m  "
+    [[ -e $HOME/install/menu_credito ]] && {
+        echo -e "  "
+        [[ "$(cat $HOME/install/menu_credito)" = "" ]] && {
+            echo -e "SIN RESELLER\033[0m"
+        } || echo -e "$(cat $HOME/install/menu_credito)\033[0m" && rm -rf $HOME/install && echo -ne "\033[0m"
+    } 
+    
 # Continúa con el resto del script después de que se haya ingresado un UUID válido
 #echo "Continuando con el script..."
     echo -e " \e[3;32m AUTORIZANDO IP DE USUARIO\e[0m" | pv -qL 10 ; rm $_Ink/list > /dev/null 2>&1; wget -P $_Ink https://raw.githubusercontent.com/DanssBot/SSHPLUS/main/Install/list >/dev/null 2>&1
