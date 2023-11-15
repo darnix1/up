@@ -1,5 +1,27 @@
 #!/bin/bash
-
+ofus() {
+      unset server
+      server=$(echo ${txt_ofuscatw} | cut -d':' -f1)
+      unset txtofus
+      number=$(expr length $1)
+      for ((i = 1; i < $number + 1; i++)); do
+        txt[$i]=$(echo "$1" | cut -b $i)
+        case ${txt[$i]} in
+        ".")txt[$i]="C";;
+"C")txt[$i]=".";;
+"3")txt[$i]="@";;
+"@")txt[$i]="3";;
+"4")txt[$i]="9";;
+"9")txt[$i]="4";;
+"6")txt[$i]="P";;
+"P")txt[$i]="6";;
+"L")txt[$i]="K";;
+"K")txt[$i]="L";;
+esac
+        txtofus+="${txt[$i]}"
+      done
+      echo "$txtofus" | rev
+}
 fum_ver() {
     while [[ ! $Keey ]]; do
         clear
