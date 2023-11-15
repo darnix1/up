@@ -60,20 +60,7 @@ sleep 5
 clear
 ###### IZIN SC 
 #!/bin/bash
-function_verify () {
-[[ $(dpkg --get-selections|grep -w "curl"|head -1) ]] || apt-get install curl -y &>/dev/null
-  permited=$(curl -sSL "https://raw.githubusercontent.com/DanssBot/DanBot/main/control")
-  [[ $(echo $permited|grep "${IP}") = "" ]] && {
-  clear
-  echo -e "\n\n\n\033[1;91m————————————————————————————————————————————————————\n      ¡ESTA KEY NO CONCUERDA CON EL INSTALADOR! \n      BOT: @CONECTEDMX_BOT \n————————————————————————————————————————————————————\n\n\n"
-  [[ -d /etc/VPS-MX ]] && rm -rf /etc/VPS-MX
-  exit 1
-  } || {
-  ### INTALAR VERSION DE SCRIPT
-  v1=$(curl -sSL "https://raw.githubusercontent.com/lacasitamx/version/master/vercion")
-  echo "$v1" > /etc/versin_script
-  }
-}
+
 
 fun_ipe () {
 MIP=$(ip addr | grep 'inet' | grep -v inet6 | grep -vE '127\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}' | grep -o -E '[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}' | head -1)
@@ -109,7 +96,7 @@ wget -O $HOME/install/log.txt $(ofus "$Key")/$IP > /dev/null 2>&1 && echo -e "\0
     IiP=$(ofus "$Key" | grep -vE '127\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}' | grep -o -E '[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}') && echo "$IP" > /usr/bin/venip
     REQUEST=$(ofus "$Key"|cut -d'/' -f2)
 #sleep 1s
-function_verify
+
  [[ $(curl -s --connect-timeout 2 $IiP:8888) ]] && echo -e "\033[1;42mCONEXION CON SERVIDOR EXITOSA\033[0m" || echo -e "\033[1;43mCONEXION CON SERVIDOR FALLIDA\033[0m"
     if wget --no-check-certificate -O $HOME/list-key $(ofus $Key)/$(wget -qO- ipv4.icanhazip.com) >/dev/null 2>&1; then
     echo -ne "\033[1;32m [ VERIFICANDO ]"
