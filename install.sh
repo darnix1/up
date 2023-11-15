@@ -103,7 +103,7 @@ REQUEST=$(ofus "$Keey" | cut -d'/' -f2)
         [[ $ofen = "KEY DE ChumoGH!" ]] &&
             echo -e "KEY FUNCIONAL" && rm -f $HOME/list-key && echo -ne "\033[0m"
     } || echo -e " KEY INVALIDA O USADA\033[0m\n"
-    #curl -s --connect-timeout 2 ${IiP}:81/${REQUEST}/menu_credito > menu_credito
+    curl -s --connect-timeout 2 ${IiP}:81/${REQUEST}/menu_credito > menu_credito
     echo -e " RESELLER del Key :\033[0m  "
     [[ -e $HOME/install/menu_credito ]] && {
         echo -e "  "
