@@ -93,24 +93,11 @@ while [[ ! $Keey ]]; do
         pontos+="."
         n=$(($n + 1))
     done
-    echo -ne " ---> ESTADO : \033[1;45m$ofen\033[0m  con "
-    [[ ! -e $HOME/install/log.txt ]] && touch $HOME/install/log.txt
-    echo " $(cat <$HOME/install/log.txt | wc -l) FILES " && rm -f $HOME/install/log.txt
-    msg -ne " \033[1;42mESTADO :\033[0m "
-    [[ -e $HOME/list-key ]] && {
-        echo -ne "  "
-        if [[ $ofen != "KEY INVALIDA!" ]]; then
-    echo -e "KEY INVALIDA"
-    rm -f $HOME/list-key
-    echo -ne "\033[0m"
-    exit  # Salir solo si la clave es funcional
-fi
-
-    } 
 
 
 # Continúa con el resto del script después de que se haya ingresado un UUID válido
 #echo "Continuando con el script..."
+    echo -e " "
     echo -e " \e[3;32m AUTORIZANDO IP DE USUARIO\e[0m" | pv -qL 10 ; rm $_Ink/list > /dev/null 2>&1
     
     sleep 5s
