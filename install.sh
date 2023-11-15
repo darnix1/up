@@ -83,7 +83,8 @@ while [[ ! $Keey ]]; do
         export PATH=$PATH:/usr/sbin:/usr/local/sbin:/usr/local/bin:/usr/bin:/sbin:/bin:/usr/games
         figlet "  LATMX" | lolcat
 	echo -e "\n      \033[1;32m DIGITA TU KEY  "
-        echo -e "PEGA TU KEY: " && read Keey
+        echo -e "\n"
+        echo -e "PEGA TU KEY 👇: " && read Keey
         [[ ! -z $Keey ]] && Keey="$(echo "$Keey" | tr -d '[[:space:]]')"
         tput cuu1 && tput dl1
     done
