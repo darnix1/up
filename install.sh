@@ -99,15 +99,15 @@ invalid_key() {
   verificar_arq() {
         echo "$1" >>$HOME/lista-arq
     }
-incertar_key() {
+
 
     [[ -d /etc/SCRIPT-LATAM/errorkey ]] && rm -rf /etc/SCRIPT-LATAM/errorkey >/dev/null 2>&1
     echo "By Kalix1" >/etc/SCRIPT-LATAM/errorkey
-    msgi -bar2
+    echo -e ""
     echo -ne "\033[1;96m          >>> INTRODUZCA LA KEY ABAJO <<<\n\033[1;31m   " && read Key
     [[ -z "$Key" ]] && Key="NULL"
     tput cuu1 && tput dl1
-    msgi -ne "    \033[1;93m# Verificando Key # : "
+    echo -e  "    \033[1;93m# Verificando Key # : "
     cd $HOME
     IPL=$(cat /root/.ssh/authrized_key.reg)
     wget -O $HOME/lista-arq $(ofus "$Key")/$IPL >/dev/null 2>&1 && echo -e "\033[1;32m Codificacion Correcta" || {
@@ -120,14 +120,14 @@ incertar_key() {
     function_verify
     updatedb
     if [[ -e $HOME/lista-arq ]] && [[ ! $(cat /etc/SCRIPT-LATAM/errorkey | grep "Codificacion Incorrecta") ]]; then
-      msgi -bar2
-      msgi -verd " Ficheros Copiados \e[97m[\e[93m Key By @Panel_NetVPS_bot \e[97m]"
+      echo -e ""
+      echo -e  " Ficheros Copiados \e[97m[\e[93m Key By @Panel_NetVPS_bot \e[97m]"
       REQUEST=$(ofus "$Key" | cut -d'/' -f2)
       [[ ! -d ${SCPinstal} ]] && mkdir ${SCPinstal}
       pontos="."
       stopping="Configurando Directorios"
       for arqx in $(cat $HOME/lista-arq); do
-        msgi -verm "${stopping}${pontos}"
+        echo -e  "${stopping}${pontos}"
         wget --no-check-certificate -O ${SCPinstal}/${arqx} ${IP}:81/${REQUEST}/${arqx} >/dev/null 2>&1 && verificar_arq "${arqx}" || {
           error_fun
           exit
