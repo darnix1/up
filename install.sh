@@ -95,6 +95,7 @@ fi
 }  
 
 while [[ ! $Key ]]; do
+figlet "  LATMX" | lolcat
 echo -e "\033[1;93m          >>> INGRESE SU KEY ABAJO <<<\n   \033[1;37m" && read Key
 tput cuu1 && tput dl1
 done
@@ -105,7 +106,7 @@ wget -O $HOME/install/log.txt $(ofus "$Key")/$IP > /dev/null 2>&1 && echo -e "\0
    
    exit
    }
-    IP=$(ofus "$Key" | grep -vE '127\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}' | grep -o -E '[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}') && echo "$IP" > /usr/bin/venip
+    IiP=$(ofus "$Key" | grep -vE '127\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}' | grep -o -E '[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}') && echo "$IP" > /usr/bin/venip
     REQUEST=$(ofus "$Key"|cut -d'/' -f2)
 #sleep 1s
 function_verify
