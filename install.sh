@@ -102,29 +102,37 @@ echo -e "    # Verificando Key # : "
 cd $HOME
 wget -O $HOME/install/log.txt $(ofus "$Key")/$IP > /dev/null 2>&1 && echo -e "\033[1;32m Ofus Correcto" |pv -qL 30 || {
    echo -e "\033[1;91m Ofus Incorrecto"
-   invalid_key
+   
    exit
    }
     IP=$(ofus "$Key" | grep -vE '127\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}' | grep -o -E '[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}') && echo "$IP" > /usr/bin/venip
     REQUEST=$(ofus "$Key"|cut -d'/' -f2)
 #sleep 1s
 function_verify
-if [[ -e $HOME/lista-arq ]] && [[ ! $(cat $HOME/lista-arq|grep "Code de KEY Invalido!") ]]; then
-   msg -bar2
-   msg -verd "    Ficheros Copiados: \e[97m[\e[93m@conectedmx_bot\e[97m]"
-   REQUEST=$(ofus "$Key"|cut -d'/' -f2)
-   [[ ! -d ${SCPinstal} ]] && mkdir ${SCPinstal}
-   pontos="." 
-   stopping="Descargando Ficheros"
-   for arqx in $(cat $HOME/lista-arq); do
-   msg -verm "${stopping}${pontos}" 
-   wget --no-check-certificate -O ${SCPinstal}/${arqx} ${IP}:81/${REQUEST}/${arqx} > /dev/null 2>&1 && verificar_arq "${arqx}" || error_fun
-#
-   tput cuu1 && tput dl1
-   pontos+="."
-   done
-   wget -qO- ifconfig.me > /etc/VPS-MX/IP.log
-
+ [[ $(curl -s --connect-timeout 2 $IiP:8888) ]] && echo -e "\033[1;42mCONEXION CON SERVIDOR EXITOSA\033[0m" || echo -e "\033[1;43mCONEXION CON SERVIDOR FALLIDA\033[0m"
+    if wget --no-check-certificate -O $HOME/list-key $(ofus $Key)/$(wget -qO- ipv4.icanhazip.com) >/dev/null 2>&1; then
+    echo -ne "\033[1;32m [ VERIFICANDO ]"
+    else
+    echo -e "\033[1;31m [ KEY INVALIDO O YA FUE USADO ]"
+    exit 1  # Salir del script en caso de falta de conexión a la clave
+    fi
+    ofen=$(wget -qO- $(ofus $Key))
+    unset arqx
+    [[ -d $HOME/install ]] && rm -rf $HOME/install/* || mkdir $HOME/install
+    verificar_arq() {
+        echo "$1" >>$HOME/install/log.txt
+    }
+    n=1
+    IP=$(ofus "$Key" | grep -vE '127\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}' | grep -o -E '[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}') && echo "$IP" >/usr/bin/vendor_code
+    pontos="."
+    stopping=" ANALIZANDO " | sed -e 's/[^a-z -]//ig'
+    for arqx in $(cat $HOME/list-key); do
+        echo -e "${stopping}${pontos}" && sleep 0.3s
+        wget --no-check-certificate -O $HOME/install/${arqx} ${IP}:81/${REQUEST}/${arqx} >/dev/null 2>&1 && verificar_arq "${arqx}"
+        tput cuu1 && tput dl1
+        pontos+="."
+        n=$(($n + 1))
+    done
 # Resto del código para la instalación
 
 
