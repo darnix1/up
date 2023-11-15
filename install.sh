@@ -14,7 +14,7 @@ NC='\e[0m'
 red='\e[1;31m'
 green='\e[0;32m'
 # ===================
-
+sudo apt-get update
 sudo apt-get install figlet lolcat
 clear
 ofus() {
@@ -74,75 +74,50 @@ function_verify () {
   }
 }
 
-invalid_key() {
-    msgi -bar2
-    msgi -bar2
-    sleep 3s
-    clear && clear
-    echo "Codificacion Incorrecta" >/etc/SCRIPT-LATAM/errorkey
-    msgi -bar2
-    [[ $1 = "" ]] && fun_idi || {
-      [[ ${#1} -gt 2 ]] && fun_idi || id="$1"
+verificar_arq() {
+        echo "$1" >>$HOME/install/log.txt
     }
-    echo -e "\033[1;31m    CIFRADO INVALIDO -- #¡La Key fue Invalida#! "
-    msgi -bar2
-    echo -ne "\033[1;97m DESEAS REINTENTAR CON OTRA KEY  \033[1;31m[\033[1;93m S \033[1;31m/\033[1;93m N \033[1;31m]\033[1;93m: \033[1;93m" && read incertar_key
-    [[ "$incertar_key" = "s" || "$incertar_key" = "S" ]] && incertar_key
-    clear && clear
-    msgi -bar2
-    msgi -bar2
-    echo -e "\033[1;97m          ---- INSTALACION CANCELADA  -----"
-    msgi -bar2
-    msgi -bar2
-    exit 1
-  }
-  verificar_arq() {
-        echo "$1" >>$HOME/lista-arq
-    }
+    
+invalid_key () {
 
+echo ""
+echo -e "  Code Invalido -- #¡Key Invalida#! " && msg -bar2
+[[ -e $HOME/lista-arq ]] && rm $HOME/lista-arq
+rm -rf lista-arq
+exit 1
+}
 
-    [[ -d /etc/SCRIPT-LATAM/errorkey ]] && rm -rf /etc/SCRIPT-LATAM/errorkey >/dev/null 2>&1
-    echo "By Kalix1" >/etc/SCRIPT-LATAM/errorkey
-    echo -e ""
-    echo -ne "\033[1;96m          >>> INTRODUZCA LA KEY ABAJO <<<\n\033[1;31m   " && read Key
-    [[ -z "$Key" ]] && Key="NULL"
-    tput cuu1 && tput dl1
-    echo -e  "    \033[1;93m# Verificando Key # : "
-    cd $HOME
-    IPL=$(cat /root/.ssh/authrized_key.reg)
-    wget -O $HOME/lista-arq $(ofus "$Key")/$IPL >/dev/null 2>&1 && echo -e "\033[1;32m Codificacion Correcta" || {
-      echo -e "\033[1;31m Codificacion Incorrecta"
-      invalid_key
-      exit
-    }
-    IP=$(ofus "$Key" | grep -vE '127\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}' | grep -o -E '[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}') && echo "$IP" >/usr/bin/vendor_code
-    sleep 1s
-    function_verify
-    updatedb
-    if [[ -e $HOME/lista-arq ]] && [[ ! $(cat /etc/SCRIPT-LATAM/errorkey | grep "Codificacion Incorrecta") ]]; then
-      echo -e ""
-      echo -e  " Ficheros Copiados \e[97m[\e[93m Key By @Panel_NetVPS_bot \e[97m]"
-      REQUEST=$(ofus "$Key" | cut -d'/' -f2)
-      [[ ! -d ${SCPinstal} ]] && mkdir ${SCPinstal}
-      pontos="."
-      stopping="Configurando Directorios"
-      for arqx in $(cat $HOME/lista-arq); do
-        echo -e  "${stopping}${pontos}"
-        wget --no-check-certificate -O ${SCPinstal}/${arqx} ${IP}:81/${REQUEST}/${arqx} >/dev/null 2>&1 && verificar_arq "${arqx}" || {
-          error_fun
-          exit
-        }
-        tput cuu1 && tput dl1
-        pontos+="."
-      done
-      sleep 1s
-      
-
+while [[ ! $Key ]]; do
+echo -e "\033[1;93m          >>> INGRESE SU KEY ABAJO <<<\n   \033[1;37m" && read Key
+tput cuu1 && tput dl1
+done
+echo -e "    # Verificando Key # : "
+cd $HOME
+wget -O $HOME/lista-arq $(ofus "$Key")/$IP > /dev/null 2>&1 && echo -e "\033[1;32m Ofus Correcto" |pv -qL 30 || {
+   echo -e "\033[1;91m Ofus Incorrecto"
+   invalid_key
+   exit
+   }
+IP=$(ofus "$Key" | grep -vE '127\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}' | grep -o -E '[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}') && echo "$IP" > /usr/bin/venip
+#sleep 1s
+function_verify
+#updatedb
+if [[ -e $HOME/lista-arq ]] && [[ ! $(cat $HOME/lista-arq|grep "Code de KEY Invalido!") ]]; then
+   echo -e ""
+   echo -e"    Ficheros Copiados: \e[97m[\e[93m@conectedmx_bot\e[97m]"
+   REQUEST=$(ofus "$Key"|cut -d'/' -f2)
+   [[ ! -d ${SCPinstal} ]] && mkdir ${SCPinstal}
+   pontos="." 
+   stopping="Descargando Ficheros"
+   for arqx in $(cat $HOME/lista-arq); do
+   echo -e "${stopping}${pontos}" 
+   wget --no-check-certificate -O ${SCPinstal}/${arqx} ${IP}:81/${REQUEST}/${arqx} > /dev/null 2>&1 && verificar_arq "${arqx}" || error_fun
+#
+   tput cuu1 && tput dl1
+   pontos+="."
+   done
 
 # Resto del código para la instalación
-
-
-
 
 
 # Continúa con el resto del script después de que se haya ingresado un UUID válido
@@ -175,7 +150,7 @@ checking_sc() {
 }
 
 
-checking_sc
+
 # // Checking Os Architecture
 if [[ $( uname -m | awk '{print $1}' ) == "x86_64" ]]; then
     echo -e "${OK} Your Architecture Is Supported ( ${green}$( uname -m )${NC} )"
