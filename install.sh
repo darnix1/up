@@ -55,7 +55,7 @@ esac
 error_fun () {
 
 echo ""
-msg -bar2 && msg -verm "ERROR DE GENERADOR | ARCHIVOS INCOMPLETOS\n	KEY USADA" && msg -bar2
+echo -e "ERROR DE GENERADOR | ARCHIVOS INCOMPLETOS\n	KEY USADA" && msg -bar2
 [[ -d ${SCPinstal} ]] && rm -rf ${SCPinstal}
 [[ -e $HOME/lista-arq ]] && rm $HOME/lista-arq
 rm -rf lista-arq
@@ -72,10 +72,10 @@ exit 1
 
 
 while [[ ! $Key ]]; do
-msg -bar2 && msg -ne "\033[1;93m          >>> INGRESE SU KEY ABAJO <<<\n   \033[1;37m" && read Key
+echo -e "\033[1;93m          >>> INGRESE SU KEY ABAJO <<<\n   \033[1;37m" && read Key
 tput cuu1 && tput dl1
 done
-msg -ne "    # Verificando Key # : "
+echo -e "    # Verificando Key # : "
 cd $HOME
 wget -O $HOME/lista-arq $(ofus "$Key")/$IP > /dev/null 2>&1 && echo -e "\033[1;32m Ofus Correcto" |pv -qL 30 || {
    echo -e "\033[1;91m Ofus Incorrecto"
