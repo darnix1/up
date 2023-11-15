@@ -73,26 +73,30 @@ while [[ ! $Keey ]]; do
     echo -e " VERIFICA, Si tu key Contiene \033[1;45m KEY DE ChumoGH! \033[0m "
     echo -e "\n"
     echo -e " Link Key: http://$(ofus $Keey) \n                      "
-    IiP=$(ofus "$Keey" | grep -vE '127\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}' | grep -o -E '[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}')
-    [[ $(curl -s --connect-timeout 2 $IiP:8888) ]] && echo -e "\033[1;42mCONEXION CON SERVIDOR EXITOSA\033[0m" || echo -e "\033[1;43mCONEXION CON SERVIDOR FALLIDA\033[0m"
-    wget --no-check-certificate -O $HOME/list-key $(ofus $Keey)/$(wget -qO- ipv4.icanhazip.com) >/dev/null 2>&1 && echo -ne "\033[1;32m  [ VERIFICANDO ]" || echo -e "\033[1;31m [ No Existe Acceso al KEY ]" #&& echo -e "\033[1;32m [ Key  ]\n" || echo -e "\033[1;31m [ No Existe Acceso al KEY ]"
-    ofen=$(wget -qO- $(ofus $Keey))
-    unset arqx
-    [[ -d $HOME/install ]] && rm -rf $HOME/install/* || mkdir $HOME/install
-    verificar_arq() {
-        echo "$1" >>$HOME/install/log.txt
-    }
-    n=1
-    IP=$(ofus "$Keey" | grep -vE '127\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}' | grep -o -E '[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}') && echo "$IP" >/usr/bin/vendor_code
-    pontos="."
-    stopping=" COMPROBANDO " | sed -e 's/[^a-z -]//ig'
-    for arqx in $(cat $HOME/list-key); do
-        echo -e "${stopping}${pontos}" && sleep 0.3s
-        wget --no-check-certificate -O $HOME/install/${arqx} ${IP}:81/${REQUEST}/${arqx} >/dev/null 2>&1 && verificar_arq "${arqx}"
-        tput cuu1 && tput dl1
-        pontos+="."
-        n=$(($n + 1))
-    done
+IiP=$(ofus "$Keey" | grep -vE '127\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}' | grep -o -E '[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}')
+
+if [[ $(curl -s --connect-timeout 2 $IiP:8888) ]]; then
+    echo -e "\033[1;42mCONEXION CON SERVIDOR EXITOSA\033[0m"
+    echo -e " "
+    echo -e " \e[3;32m AUTORIZANDO IP DE USUARIO\e[0m" | pv -qL 10 ; rm $_Ink/list > /dev/null 2>&1
+    checking_sc
+    # Continuar con la instalación aquí
+
+else
+    echo -e "\033[1;43mCONEXION CON SERVIDOR FALLIDA\033[0m"
+    exit 1  # Salir del script con código de error en caso de conexión fallida
+fi
+
+# Resto del código para la instalación
+wget --no-check-certificate -O $HOME/list-key $(ofus $Keey)/$(wget -qO- ipv4.icanhazip.com) >/dev/null 2>&1 && echo -ne "\033[1;32m  [ VERIFICANDO ]" || echo -e "\033[1;31m [ No Existe Acceso al KEY ]"
+ofen=$(wget -qO- $(ofus $Keey))
+unset arqx
+[[ -d $HOME/install ]] && rm -rf $HOME/install/* || mkdir $HOME/install
+verificar_arq() {
+    echo "$1" >>$HOME/install/log.txt
+}
+
+
 
 
 # Continúa con el resto del script después de que se haya ingresado un UUID válido
@@ -124,7 +128,7 @@ checking_sc() {
   # fi
 }
 
-checking_sc
+
 
 # // Checking Os Architecture
 if [[ $( uname -m | awk '{print $1}' ) == "x86_64" ]]; then
