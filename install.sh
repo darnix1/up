@@ -101,7 +101,7 @@ while [[ ! $Keey ]]; do
         echo -ne "  "
         [[ $ofen = "KEY INVALIDA!" ]] &&
             echo -e "KEY FUNCIONAL" && rm -f $HOME/list-key && echo -ne "\033[0m"
-    } || echo -e " KEY INVALIDA O USADA\033[0m\n"
+    } 
 
 
 # Continúa con el resto del script después de que se haya ingresado un UUID válido
