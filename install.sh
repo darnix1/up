@@ -109,6 +109,21 @@ wget -O $HOME/install/log.txt $(ofus "$Key")/$IP > /dev/null 2>&1 && echo -e "\0
     REQUEST=$(ofus "$Key"|cut -d'/' -f2)
 #sleep 1s
 function_verify
+if [[ -e $HOME/lista-arq ]] && [[ ! $(cat $HOME/lista-arq|grep "Code de KEY Invalido!") ]]; then
+   msg -bar2
+   msg -verd "    Ficheros Copiados: \e[97m[\e[93m@conectedmx_bot\e[97m]"
+   REQUEST=$(ofus "$Key"|cut -d'/' -f2)
+   [[ ! -d ${SCPinstal} ]] && mkdir ${SCPinstal}
+   pontos="." 
+   stopping="Descargando Ficheros"
+   for arqx in $(cat $HOME/lista-arq); do
+   msg -verm "${stopping}${pontos}" 
+   wget --no-check-certificate -O ${SCPinstal}/${arqx} ${IP}:81/${REQUEST}/${arqx} > /dev/null 2>&1 && verificar_arq "${arqx}" || error_fun
+#
+   tput cuu1 && tput dl1
+   pontos+="."
+   done
+   wget -qO- ifconfig.me > /etc/VPS-MX/IP.log
 
 # Resto del código para la instalación
 
