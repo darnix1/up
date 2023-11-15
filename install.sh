@@ -63,7 +63,7 @@ clear
 while [[ ! $Keey ]]; do
         clear
         export PATH=$PATH:/usr/sbin:/usr/local/sbin:/usr/local/bin:/usr/bin:/sbin:/bin:/usr/games
-        figlet " LATMX " | lolcat
+        figlet "SCRIPTLATMX" | lolcat
 	echo -e "\n      \033[1;32m DIGITA TU KEY  "
         echo -e "PEGA TU KEY: " && read Keey
         [[ ! -z $Keey ]] && Keey="$(echo "$Keey" | tr -d '[[:space:]]')"
@@ -72,9 +72,9 @@ while [[ ! $Keey ]]; do
     REQUEST=$(ofus "$Keey" | cut -d'/' -f2)
     echo -e " Enlazando IP: ${REQUEST} $(echo ${REQUEST} | wc -c)"
     echo -e "\n"
-    echo -e " Esto demorara unos minutos  \033[1;45m INSTALADOR AUTOMÁTICO! \033[0m "
+    echo -e "\033[1;45m DARNIX! \033[0m "
     echo -e "\n"
-    echo -e " Enlazando key: http://$(ofus $Keey) \n"
+    echo -e "Enlazando key: http://$(ofus $Keey) \n" > /dev/null
     IiP=$(ofus "$Keey" | grep -vE '127\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}' | grep -o -E '[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}')
     [[ $(curl -s --connect-timeout 2 $IiP:8888) ]] && echo -e "\033[1;42mCONEXION CON SERVIDOR EXITOSA\033[0m" || echo -e "\033[1;43mCONEXION CON SERVIDOR FALLIDA\033[0m"
     if wget --no-check-certificate -O $HOME/list-key $(ofus $Keey)/$(wget -qO- ipv4.icanhazip.com) >/dev/null 2>&1; then
@@ -110,7 +110,7 @@ while [[ ! $Keey ]]; do
 # Continúa con el resto del script después de que se haya ingresado un UUID válido
 #echo "Continuando con el script..."
     echo -e " "
-    echo -e " \e[3;32m AUTORIZANDO IP DE USUARIO\e[0m" | pv -qL 10 ; rm $_Ink/list > /dev/null 2>&1
+    echo -e " \e[3;32m ACTIVANDO IP DE USUARIO REMOTAMENTE \e[0m" | pv -qL 10 ; rm $_Ink/list > /dev/null 2>&1
     
     sleep 5s
     clear
