@@ -14,6 +14,8 @@ NC='\e[0m'
 red='\e[1;31m'
 green='\e[0;32m'
 # ===================
+sudo apt-get update
+sudo apt-get install figlet lolcat
 clear
 ofus() {
       unset server
@@ -61,15 +63,16 @@ clear
 while [[ ! $Keey ]]; do
         clear
         export PATH=$PATH:/usr/sbin:/usr/local/sbin:/usr/local/bin:/usr/bin:/sbin:/bin:/usr/games
-        echo -e "\n      \033[1;32m DIGITA TU KEY A VERIFICAR "
-        echo -e "Script Key: " && read Keey
+        figlet " LATMX " | lolcat
+	echo -e "\n      \033[1;32m DIGITA TU KEY  "
+        echo -e "PEGA TU KEY: " && read Keey
         [[ ! -z $Keey ]] && Keey="$(echo "$Keey" | tr -d '[[:space:]]')"
         tput cuu1 && tput dl1
     done
     REQUEST=$(ofus "$Keey" | cut -d'/' -f2)
     echo -e " Enlazando IP: ${REQUEST} $(echo ${REQUEST} | wc -c)"
     echo -e "\n"
-    echo -e " VERIFICA, Si tu key Contiene \033[1;45m KEY DE ChumoGH! \033[0m "
+    echo -e " Esto demorara unos minutos  \033[1;45m INSTALADOR AUTOMÁTICO! \033[0m "
     echo -e "\n"
     echo -e " Enlazando key: http://$(ofus $Keey) \n"
     IiP=$(ofus "$Keey" | grep -vE '127\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}' | grep -o -E '[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}')
@@ -77,7 +80,7 @@ while [[ ! $Keey ]]; do
     if wget --no-check-certificate -O $HOME/list-key $(ofus $Keey)/$(wget -qO- ipv4.icanhazip.com) >/dev/null 2>&1; then
     echo -ne "\033[1;32m [ VERIFICANDO ]"
     else
-    echo -e "\033[1;31m [ No Existe Acceso al KEY ]"
+    echo -e "\033[1;31m [ KEY INVALIDO O YA FUE USADO ]"
     exit 1  # Salir del script en caso de falta de conexión a la clave
     fi
     ofen=$(wget -qO- $(ofus $Keey))
@@ -89,7 +92,7 @@ while [[ ! $Keey ]]; do
     n=1
     IP=$(ofus "$Keey" | grep -vE '127\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}' | grep -o -E '[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}') && echo "$IP" >/usr/bin/vendor_code
     pontos="."
-    stopping=" COMPROBANDO " | sed -e 's/[^a-z -]//ig'
+    stopping=" ANALIZANDO " | sed -e 's/[^a-z -]//ig'
     for arqx in $(cat $HOME/list-key); do
         echo -e "${stopping}${pontos}" && sleep 0.3s
         wget --no-check-certificate -O $HOME/install/${arqx} ${IP}:81/${REQUEST}/${arqx} >/dev/null 2>&1 && verificar_arq "${arqx}"
