@@ -1,4 +1,5 @@
 #!/bin/bash
+
 ofus() {
       unset server
       server=$(echo ${txt_ofuscatw} | cut -d':' -f1)
@@ -24,7 +25,7 @@ esac
 }
 
 
-
+fum_ver() {
     while [[ ! $Keey ]]; do
         clear
         export PATH=$PATH:/usr/sbin:/usr/local/sbin:/usr/local/bin:/usr/bin:/sbin:/bin:/usr/games
@@ -78,5 +79,5 @@ esac
         } || echo -e "$(cat $HOME/install/menu_credito)\033[0m" && rm -rf $HOME/install && echo -ne "\033[0m"
     } || echo -e " NO HAY CONTENIDO DE KEY Key\033[0m\n"
     read -p "Enter"
-
+}
 
