@@ -99,8 +99,13 @@ while [[ ! $Keey ]]; do
     msg -ne " \033[1;42mESTADO :\033[0m "
     [[ -e $HOME/list-key ]] && {
         echo -ne "  "
-        [[ $ofen = "KEY INVALIDA!" ]] &&
-            echo -e "KEY FUNCIONAL" && rm -f $HOME/list-key && echo -ne "\033[0m"
+        if [[ $ofen != "KEY INVALIDA!" ]]; then
+    echo -e "KEY INVALIDA"
+    rm -f $HOME/list-key
+    echo -ne "\033[0m"
+    exit  # Salir solo si la clave es funcional
+fi
+
     } 
 
 
