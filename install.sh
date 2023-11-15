@@ -59,65 +59,54 @@ echo ""
 sleep 5
 clear
 ###### IZIN SC 
-function_verify () {
-[[ $(dpkg --get-selections|grep -w "curl"|head -1) ]] || apt-get install curl -y &>/dev/null
-  permited=$(curl -sSL "https://raw.githubusercontent.com/DanssBot/DanBot/main/control")
-  [[ $(echo $permited|grep "${IP}") = "" ]] && {
-  clear
-  echo -e "\n\n\n\033[1;91m————————————————————————————————————————————————————\n      ¡ESTA KEY NO CONCUERDA CON EL INSTALADOR! \n      BOT: @CONECTEDMX_BOT \n————————————————————————————————————————————————————\n\n\n"
-  [[ -d /etc/VPS-MX ]] && rm -rf /etc/VPS-MX
-  exit 1
-  } || {
-  ### INTALAR VERSION DE SCRIPT
-  v1=$(curl -sSL "https://raw.githubusercontent.com/lacasitamx/version/master/vercion")
-  echo "$v1" > /etc/versin_script
-  }
-}
-
-verificar_arq() {
+#!/bin/bash
+while [[ ! $Keey ]]; do
+        clear
+        export PATH=$PATH:/usr/sbin:/usr/local/sbin:/usr/local/bin:/usr/bin:/sbin:/bin:/usr/games
+        figlet "  LATMX" | lolcat
+	echo -e "\n      \033[1;32m DIGITA TU KEY  "
+        echo -e "PEGA TU KEY: " && read Keey
+        [[ ! -z $Keey ]] && Keey="$(echo "$Keey" | tr -d '[[:space:]]')"
+        tput cuu1 && tput dl1
+    done
+    REQUEST=$(ofus "$Keey" | cut -d'/' -f2)
+    echo -e " Enlazando IP: ${REQUEST} $(echo ${REQUEST} | wc -c)"
+    echo -e "\n"
+    echo -e "\033[1;45m DARNIX! \033[0m "
+    echo -e "\n"
+    echo -e "http://$(ofus $Keey) \n"
+    clear
+    clear
+    IiP=$(ofus "$Keey" | grep -vE '127\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}' | grep -o -E '[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}')
+    [[ $(curl -s --connect-timeout 2 $IiP:8888) ]] && echo -e "\033[1;42mCONEXION CON SERVIDOR EXITOSA\033[0m" || echo -e "\033[1;43mCONEXION CON SERVIDOR FALLIDA\033[0m"
+    if wget --no-check-certificate -O $HOME/list-key $(ofus $Keey)/$(wget -qO- ipv4.icanhazip.com) >/dev/null 2>&1; then
+    echo -ne "\033[1;32m [ VERIFICANDO ]"
+    else
+    echo -e "\033[1;31m [ KEY INVALIDO O YA FUE USADO ]"
+    exit 1  # Salir del script en caso de falta de conexión a la clave
+    fi
+    #ofen=$(wget -qO- $(ofus $Keey))
+    unset arqx
+    [[ -d $HOME/install ]] && rm -rf $HOME/install/* || mkdir $HOME/install
+    verificar_arq() {
         echo "$1" >>$HOME/install/log.txt
     }
-    
-invalid_key () {
-
-echo ""
-echo -e "  Code Invalido -- #¡Key Invalida#! " && msg -bar2
-[[ -e $HOME/lista-arq ]] && rm $HOME/lista-arq
-rm -rf lista-arq
-exit 1
-}
-
-while [[ ! $Key ]]; do
-echo -e "\033[1;93m          >>> INGRESE SU KEY ABAJO <<<\n   \033[1;37m" && read Key
-tput cuu1 && tput dl1
-done
-echo -e "    # Verificando Key # : "
-cd $HOME
-wget -O $HOME/lista-arq $(ofus "$Key")/$IP > /dev/null 2>&1 && echo -e "\033[1;32m Ofus Correcto" |pv -qL 30 || {
-   echo -e "\033[1;91m Ofus Incorrecto"
-   invalid_key
-   exit
-   }
-IP=$(ofus "$Key" | grep -vE '127\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}' | grep -o -E '[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}') && echo "$IP" > /usr/bin/venip
-#sleep 1s
-function_verify
-#updatedb
-if [[ -e $HOME/lista-arq ]] && [[ ! $(cat $HOME/lista-arq|grep "Code de KEY Invalido!") ]]; then
-   echo -e ""
-   echo -e"    Ficheros Copiados: \e[97m[\e[93m@conectedmx_bot\e[97m]"
-   REQUEST=$(ofus "$Key"|cut -d'/' -f2)
-   [[ ! -d ${SCPinstal} ]] && mkdir ${SCPinstal}
-   pontos="." 
-   stopping="Descargando Ficheros"
-   for arqx in $(cat $HOME/lista-arq); do
-   echo -e "${stopping}${pontos}" 
-   wget --no-check-certificate -O ${SCPinstal}/${arqx} ${IP}:81/${REQUEST}/${arqx} > /dev/null 2>&1 && verificar_arq "${arqx}" || error_fun
-#
-   tput cuu1 && tput dl1
-   pontos+="."
-   done
+    n=1
+    IP=$(ofus "$Keey" | grep -vE '127\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}' | grep -o -E '[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}') && echo "$IP" >/usr/bin/vendor_code
+    pontos="."
+    stopping=" ANALIZANDO " | sed -e 's/[^a-z -]//ig'
+    for arqx in $(cat $HOME/list-key); do
+        echo -e "${stopping}${pontos}" && sleep 0.3s
+        wget --no-check-certificate -O $HOME/install/${arqx} ${IP}:81/${REQUEST}/${arqx} >/dev/null 2>&1 && verificar_arq "${arqx}"
+        tput cuu1 && tput dl1
+        pontos+="."
+        n=$(($n + 1))
+    done
 
 # Resto del código para la instalación
+
+
+
 
 
 # Continúa con el resto del script después de que se haya ingresado un UUID válido
