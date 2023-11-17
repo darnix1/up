@@ -115,13 +115,13 @@ IiP="$(ofus "$Key" | grep -vE '127\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}' | grep -
 cheklist="$(curl -sSL $IiP:81/dani/checkIP.log)"
 chekIP="$(echo -e "$cheklist" | grep ${Key} | awk '{print $3}')"
 chekDATE="$(echo -e "$cheklist" | grep ${Key} | awk '{print $7}')"
-msg -bar
+
 echo ""
 [[ ! -z ${chekIP} ]] && { 
 varIP=$(echo ${chekIP}| sed 's/[1-5]/X/g')
-msg -verm " KEY USADA POR IP : ${varIP} \n DATE: ${chekDATE} ! "
+echo -e " KEY USADA POR IP : ${varIP} \n DATE: ${chekDATE} ! "
 echo ""
-msg -bar
+
 }
 
 
