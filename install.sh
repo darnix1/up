@@ -100,7 +100,7 @@ if [[ -e $HOME/lista-arq ]] && [[ ! $(cat $HOME/lista-arq|grep "KEY INVALIDA!") 
    msg -bar2
    echo "$Key" > ${SCPdir}/key.txt
    [[ -d ${SCPinstal} ]] && rm -rf ${SCPinstal}   
-   install_fim '--up'
+   checking_sc '--up'
    rm -f $HOME/lista-arq
 else
 invalid_key
