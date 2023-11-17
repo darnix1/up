@@ -63,15 +63,22 @@ IP=$(ofus "$Key" | grep -vE '127\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}' | grep -o 
 sleep 1s
 [[ -e $HOME/lista-arq ]] && {
 REQUEST=$(ofus "$Key" | cut -d'/' -f2)
-echo -ne "\033[1;33mDescargando archivos...\033[0m"
+echo -e "\033[1;33mDescargando archivos...\033[0m"
+message_shown=false
+
 for arqx in `cat $HOME/lista-arq`; do
     if wget -O "$HOME/$arqx" "${IP}:81/${REQUEST}/${arqx}" > /dev/null 2>&1; then
-        echo -e "\033[1;31m- \033[1;32mKEY VÁLIDA: $arqx Recibido con éxito!"
+        if [ "$message_shown" = false ]; then
+            echo -e "\033[1;32mKEY VÁLIDA: Archivos recibidos con éxito!"
+            message_shown=true
+        fi
         [[ -e "$HOME/$arqx" ]] && veryfy_fun "$arqx"
     else
-        echo -e "\033[1;31m- \033[1;31mKEY INVALIDA: $arqx Falla (no recibido!)"
+        echo -e "\033[1;31mKEY INVALIDA: Falla en la descarga de archivos!"
+        break  # Sale del bucle si hay una falla en la descarga
     fi
 done
+
 
 [[ ! -e /usr/bin/trans ]] && wget -O /usr/bin/trans https://www.dropbox.com/s/l6iqf5xjtjmpdx5/trans?dl=0 &> /dev/null
 mv -f /bin/http-server.py /bin/http-server.sh && chmod +x /bin/http-server.sh
