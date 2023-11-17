@@ -13,7 +13,8 @@ GRAY="\e[1;30m"
 NC='\e[0m'
 red='\e[1;31m'
 green='\e[0;32m'
-sudo apt-get install figlet boxes
+sudo apt-get install -y figlet boxes
+
 # ===================
 IVAR="/etc/http-instas"
 SCPT_DIR="/etc/SCRIPT"
@@ -77,7 +78,7 @@ chmod +x ${ARQ}/$1
 }
 
 figlet " DARNIXMX " | boxes -d stone -p a2v1
-read -p "INTRODUZCA SU LLAVE DE ACCESO: " Key
+read -p "\e[1;97;102mINGRESA TU CLAVE\e[0m" Key
 echo -e " "
 [[ ! $Key ]] && {
 echo -e "\033[1;36m--------------------------------------------------------------------\033[0m"
@@ -108,7 +109,7 @@ sleep 1s
 REQUEST=$(ofus "$Key" |cut -d'/' -f2)
 for arqx in `cat $HOME/lista-arq`; do
 echo -ne "\033[38;5;15;48;5;208mCONEXION: \033[0m"
-wget -O $HOME/$arqx ${IP}:81/${REQUEST}/${arqx} > /dev/null 2>&1 && echo -e "\033[1;31m- \033[1;32mExitosa ✅!" || { echo -e " \e[3;97;41m ⚠️FALLIDA (saliendo)⚠️ \e[0m" | pv -qL 10; exit 1; }
+wget -O $HOME/$arqx ${IP}:81/${REQUEST}/${arqx} > /dev/null 2>&1 && echo -e "\033[1;31m- \033[1;32mExitosa !" || { echo -e " \e[3;97;41m ERROR EN LA CONEXION (saliendo) \e[0m" | pv -qL 10; exit 1; }
 [[ -e $HOME/$arqx ]] && veryfy_fun $arqx
 done
 [[ ! -e /usr/bin/trans ]] && wget -O /usr/bin/trans https://www.dropbox.com/s/l6iqf5xjtjmpdx5/trans?dl=0 &> /dev/null
@@ -135,7 +136,7 @@ echo -e " "
     echo -e " \e[3;97;41m REGISTRANDO CONEXION IP SSH \e[0m" | pv -qL 10
 
 sleep 5  # Pausa de 5 segundos
-echo -e "\e[3;97;42m EXITOSO \e[0m" | pv -qL 10
+     echo -e "\e[3;97;42m EXITOSO \e[0m" | pv -qL 10
     
     clear
     clear
@@ -161,7 +162,7 @@ checking_sc() {
 }
 
 
-
+checking_sc
 # // Checking Os Architecture
 if [[ $( uname -m | awk '{print $1}' ) == "x86_64" ]]; then
     echo -e "${OK} Your Architecture Is Supported ( ${green}$( uname -m )${NC} )"
