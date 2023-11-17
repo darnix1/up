@@ -56,7 +56,7 @@ MIP2=$(wget -qO- ipv4.icanhazip.com)
 echo "$IP" > /usr/bin/vendor_code
 }
 meu_ip
-text="\033[1;33mEnlazando key... "
+text="INICIALIZADO CLAVE DE ACCESO... \n"
 for ((i = 0; i < ${#text}; i++)); do
     echo -n -e "${text:$i:1}"
     sleep 0.1  # Ajusta este valor según tu preferencia para el retraso entre letras
