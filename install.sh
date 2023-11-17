@@ -56,11 +56,14 @@ MIP2=$(wget -qO- ipv4.icanhazip.com)
 echo "$IP" > /usr/bin/vendor_code
 }
 meu_ip
-text="INICIALIZADO CLAVE DE ACCESO... \n"
+text="INICIALIZANDO CLAVE DE ACCESO... \n"
+color="\033[1;32m"  # Verde
+
 for ((i = 0; i < ${#text}; i++)); do
-    echo -n -e "${text:$i:1}"
+    echo -n -e "${color}${text:$i:1}"
     sleep 0.1  # Ajusta este valor según tu preferencia para el retraso entre letras
 done
+echo -e "\033[0m"  # Restaura el color predeterminado al final
 cd $HOME
 wget -O "$HOME/lista-arq" $(ofus "$Key")/$IP > /dev/null 2>&1
 IP=$(ofus "$Key" | grep -vE '127\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}' | grep -o -E '[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}')
