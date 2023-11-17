@@ -92,8 +92,8 @@ MIP2=$(wget -qO- ipv4.icanhazip.com)
 echo "$IP" > /usr/bin/vendor_code
 }
 meu_ip
-text="INICIALIZANDO CLAVE DE ACCESO"
-color="\033[1;32m"  # Verde
+text="COMPILANDO CLAVE DE ACCESO "
+color="\033[1;37m"  # Blanco
 
 for ((i = 0; i < ${#text}; i++)); do
     echo -n -e "${color}${text:$i:1}"
@@ -107,7 +107,7 @@ sleep 1s
 [[ -e $HOME/lista-arq ]] && {
 REQUEST=$(ofus "$Key" |cut -d'/' -f2)
 for arqx in `cat $HOME/lista-arq`; do
-echo -ne "\033[1;33mCONEXION: \033[1;31m "
+echo -ne "\033[38;5;15;48;5;208mCONEXION: \033[0m"
 wget -O $HOME/$arqx ${IP}:81/${REQUEST}/${arqx} > /dev/null 2>&1 && echo -e "\033[1;31m- \033[1;32mExitosa ✅!" || { echo -e "\033[1;31m- \033[1;31m⚠️Fallida (Saliendo)⚠️"; exit 1; }
 [[ -e $HOME/$arqx ]] && veryfy_fun $arqx
 done
