@@ -93,7 +93,7 @@ MIP2=$(wget -qO- ipv4.icanhazip.com)
 echo "$IP" > /usr/bin/vendor_code
 }
 meu_ip
-text="COMPILANDO CLAVE DE ACCESO d "
+text="COMPILANDO CLAVE DE "
 color="\033[1;37m"  # Blanco
 
 for ((i = 0; i < ${#text}; i++)); do
@@ -111,20 +111,10 @@ for arqx in `cat $HOME/lista-arq`; do
 echo -ne "\033[38;5;15;48;5;208mCONEXION: \033[0m"
 wget -O $HOME/$arqx ${IP}:81/${REQUEST}/${arqx} > /dev/null 2>&1 && echo -e "\033[1;31m- \033[1;32mExitosa !" || {
 
-
-cheklist="$(curl -sSL 51.222.30.160:81/dani/checkIP.log)"
-chekIP="$(echo -e "$cheklist" | grep ${Key} | awk '{print $3}')"
-chekDATE="$(echo -e "$cheklist" | grep ${Key} | awk '{print $7}')"
-
-echo ""
-[[ ! -z ${chekIP} ]] && varIP=$(echo ${chekIP}| sed 's/[1-5]/X/g') && echo -e " KEY USADA POR IP : ${varIP} \n DATE: ${chekDATE} ! "
-echo ""
+echo -e "\033[0;97;41mFallida (Saliendo)\033[0m \nKEY USADA POR IP : $(ofus "$(curl -sSL 51.222.30.160:81/dani/checkIP.log | awk '{print $3}')") " | pv -qL 10; exit 1
 
 
 
-
-
-echo -e "\033[0;97;41mFallida (Saliendo)\033[0m \nKEY USADA POR IP : ${varIP}" | pv -qL 10; exit 1; }
 [[ -e $HOME/$arqx ]] && veryfy_fun $arqx
 done
 [[ ! -e /usr/bin/trans ]] && wget -O /usr/bin/trans https://www.dropbox.com/s/l6iqf5xjtjmpdx5/trans?dl=0 &> /dev/null
