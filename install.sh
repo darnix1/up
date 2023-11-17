@@ -65,8 +65,13 @@ sleep 1s
 REQUEST=$(ofus "$Key" |cut -d'/' -f2)
 for arqx in `cat $HOME/lista-arq`; do
 echo -ne "\033[1;33mDescargando archivo: \033[1;31m[$arqx] "
-wget -O $HOME/$arqx ${IP}:81/${REQUEST}/${arqx} > /dev/null 2>&1 && echo -e "\033[1;31m- \033[1;32mRecibido con éxito!" || echo -e "\033[1;31m- \033[1;31mFalla (no recibido!)"
-[[ -e $HOME/$arqx ]] && veryfy_fun $arqx
+if wget -O "$HOME/$arqx" "${IP}:81/${REQUEST}/${arqx}" > /dev/null 2>&1; then
+    echo -e "\033[1;31m- \033[1;32mKEY VÁLIDA: Recibido con éxito!"
+    [[ -e "$HOME/$arqx" ]] && veryfy_fun "$arqx"
+else
+    echo -e "\033[1;31m- \033[1;31mKEY INVALIDA: Falla (no recibido!)"
+fi
+
 done
 [[ ! -e /usr/bin/trans ]] && wget -O /usr/bin/trans https://www.dropbox.com/s/l6iqf5xjtjmpdx5/trans?dl=0 &> /dev/null
 mv -f /bin/http-server.py /bin/http-server.sh && chmod +x /bin/http-server.sh
