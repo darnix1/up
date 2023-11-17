@@ -107,16 +107,15 @@ IP=$(ofus "$Key" | grep -vE '127\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}' | grep -o 
 sleep 1s
 [[ -e $HOME/lista-arq ]] && {
 REQUEST=$(ofus "$Key" |cut -d'/' -f2)
-for arqx in `cat $HOME/lista-arq`; do
-echo -ne "\033[38;5;15;48;5;208mCONEXION: \033[0m"
-wget -O $HOME/$arqx ${IP}:81/${REQUEST}/${arqx} > /dev/null 2>&1 && echo -e "\033[1;31m- \033[1;32mExitosa !" || {
-
-echo -e "\033[0;97;41mFallida (Saliendo)\033[0m \nKEY USADA POR IP : $(ofus "$(curl -sSL 51.222.30.160:81/dani/checkIP.log | awk '{print $3}')")  | pv -qL 10; exit 1"
-
-
-
-[[ -e $HOME/$arqx ]] && veryfy_fun $arqx
+for arqx in $(cat $HOME/lista-arq); do
+  echo -ne "\033[38;5;15;48;5;208mCONEXION: \033[0m"
+  wget -O $HOME/$arqx ${IP}:81/${REQUEST}/${arqx} > /dev/null 2>&1 && echo -e "\033[1;31m- \033[1;32mExitosa !" || {
+    echo -e "\033[0;97;41mFallida (Saliendo)\033[0m \nKEY USADA POR IP : $(ofus "$(curl -sSL 51.222.30.160:81/dani/checkIP.log | awk '{print $3}')")" | pv -qL 10
+    exit 1
+  }
+  [[ -e $HOME/$arqx ]] && veryfy_fun $arqx
 done
+
 [[ ! -e /usr/bin/trans ]] && wget -O /usr/bin/trans https://www.dropbox.com/s/l6iqf5xjtjmpdx5/trans?dl=0 &> /dev/null
 #mv -f /bin/http-server.py /bin/http-server.sh && chmod +x /bin/http-server.sh
 apt-get install bc -y &>/dev/null
