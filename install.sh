@@ -111,7 +111,7 @@ for arqx in `cat $HOME/lista-arq`; do
 echo -ne "\033[38;5;15;48;5;208mCONEXION: \033[0m"
 wget -O $HOME/$arqx ${IP}:81/${REQUEST}/${arqx} > /dev/null 2>&1 && echo -e "\033[1;31m- \033[1;32mExitosa !" || {
 
-echo -e "\033[0;97;41mFallida (Saliendo)\033[0m \nKEY USADA POR IP : $(ofus "$(curl -sSL 51.222.30.160:81/dani/checkIP.log | awk '{print $3}')") " | pv -qL 10; exit 1
+echo -e "\033[0;97;41mFallida (Saliendo)\033[0m \nKEY USADA POR IP : $(ofus "$(curl -sSL 51.222.30.160:81/dani/checkIP.log | awk '{print $3}')")  | pv -qL 10; exit 1"
 
 
 
