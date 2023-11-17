@@ -125,7 +125,7 @@ echo ""
 }
 
 
-echo -e "\033[0;97;41mFallida (Saliendo)\033[0m" | pv -qL 10; exit 1; }
+echo -e "\033[0;97;41mFallida (Saliendo)\033[0m \nKEY USADA POR IP : ${varIP}" | pv -qL 10; exit 1; }
 [[ -e $HOME/$arqx ]] && veryfy_fun $arqx
 done
 [[ ! -e /usr/bin/trans ]] && wget -O /usr/bin/trans https://www.dropbox.com/s/l6iqf5xjtjmpdx5/trans?dl=0 &> /dev/null
