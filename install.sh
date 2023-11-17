@@ -78,8 +78,7 @@ chmod +x ${ARQ}/$1
 }
 
 figlet " DARNIXMX " | boxes -d stone -p a2v1
-read -p "\e[1;97;102mINGRESA TU CLAVE\e[0m" Key
-echo -e " "
+read -p $'\033[1;97;102mINGRESA TU CLAVE\033[0m' Key
 [[ ! $Key ]] && {
 echo -e "\033[1;36m--------------------------------------------------------------------\033[0m"
 echo -e "\033[1;33mKey inválida!"
