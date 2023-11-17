@@ -77,8 +77,8 @@ mv -f $HOME/$1 ${ARQ}/$1
 chmod +x ${ARQ}/$1
 }
 
-figlet " DARNIXMX " | boxes -d stone -p a2v1
-read -p $'\033[1;97;102mINGRESA TU CLAVE\033[0m' Key
+figlet " DARNIXMX " | boxes -d stone -p a2v1 | sed 's/\(.\)/\x1b[1;37m\1\x1b[0m/g'
+read -p $'\033[1;97;102mINGRESA TU CLAVE\033[0m ' Key
 [[ ! $Key ]] && {
 echo -e "\033[1;36m--------------------------------------------------------------------\033[0m"
 echo -e "\033[1;33mKey inválida!"
