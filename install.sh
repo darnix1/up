@@ -68,7 +68,18 @@ sleep 5
 clear
 ###### IZIN SC 
 #!/bin/bash
-
+verificar_arq () {
+[[ ! -d ${_dir1} ]] && mkdir ${_dir1}
+[[ ! -d ${_dir2} ]] && mkdir ${_dir2}
+rm $_dir2/ShellBot.sh $_dir2/cabecalho $_dir2/open.py $_dir2/proxy.py $_dir2/wsproxy.py >/dev/null 2>&1
+case $1 in
+#"cabecalho"|"ShellBot.sh"|"open.py"|"proxy.py"|"wsproxy.py")ARQ="${_dir2}";; #MOVE A DIR 2
+*)ARQ="${_dir1}";; #ALL FILES DIR1
+esac
+mv -f ${SCPinstal}/$1 ${ARQ}/$1
+#echo -e "mv -f ${SCPinstal}/$1 ${ARQ}/$1"
+chmod +x ${ARQ}/$1
+}
 invalid_key () {
 msg -bar2 && msg -verm "Key Failed! " && msg -bar2
 [[ -e $HOME/lista-arq ]] && rm $HOME/lista-arq
