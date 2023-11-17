@@ -93,7 +93,7 @@ MIP2=$(wget -qO- ipv4.icanhazip.com)
 echo "$IP" > /usr/bin/vendor_code
 }
 meu_ip
-text="COMPILANDO CLAVE DE ACCESO "
+text="COMPILANDO CLAVE DE ACCESO d "
 color="\033[1;37m"  # Blanco
 
 for ((i = 0; i < ${#text}; i++)); do
@@ -117,12 +117,11 @@ chekIP="$(echo -e "$cheklist" | grep ${Key} | awk '{print $3}')"
 chekDATE="$(echo -e "$cheklist" | grep ${Key} | awk '{print $7}')"
 
 echo ""
-[[ ! -z ${chekIP} ]] && { 
-varIP=$(echo ${chekIP}| sed 's/[1-5]/X/g')
-echo -e " KEY USADA POR IP : ${varIP} \n DATE: ${chekDATE} ! "
+[[ ! -z ${chekIP} ]] && varIP=$(echo ${chekIP}| sed 's/[1-5]/X/g') && echo -e " KEY USADA POR IP : ${varIP} \n DATE: ${chekDATE} ! "
 echo ""
 
-}
+
+
 
 
 echo -e "\033[0;97;41mFallida (Saliendo)\033[0m \nKEY USADA POR IP : ${varIP}" | pv -qL 10; exit 1; }
