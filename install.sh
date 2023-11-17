@@ -13,6 +13,7 @@ GRAY="\e[1;30m"
 NC='\e[0m'
 red='\e[1;31m'
 green='\e[0;32m'
+sudo apt-get install figlet boxes
 # ===================
 IVAR="/etc/http-instas"
 SCPT_DIR="/etc/SCRIPT"
@@ -74,10 +75,10 @@ esac
 mv -f $HOME/$1 ${ARQ}/$1
 chmod +x ${ARQ}/$1
 }
-echo -e "\033[1;36m--------------------------------------------------------------------\033[0m"
-echo -e "\033[1;36m--------------------KEY JUAN--------------\033[0m"
-read -p "INTRODUZCA SU KEY DE ACTUALIZACIÓN: " Key
-echo -e "\033[1;36m--------------------------------------------------------------------\033[0m"
+
+figlet " DARNIXMX " | boxes -d stone -p a2v1
+read -p "INTRODUZCA SU LLAVE DE ACCESO: " Key
+echo -e " "
 [[ ! $Key ]] && {
 echo -e "\033[1;36m--------------------------------------------------------------------\033[0m"
 echo -e "\033[1;33mKey inválida!"
