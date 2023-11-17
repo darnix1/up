@@ -62,23 +62,14 @@ wget -O "$HOME/lista-arq" $(ofus "$Key")/$IP > /dev/null 2>&1
 IP=$(ofus "$Key" | grep -vE '127\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}' | grep -o -E '[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}')
 sleep 1s
 [[ -e $HOME/lista-arq ]] && {
-    REQUEST=$(ofus "$Key" | cut -d'/' -f2)
-    echo -ne "\033[1;33mDescargando archivos:\033[0m "
-    success=true  # Variable para rastrear el estado de la descarga
-
-    for arqx in $(cat $HOME/lista-arq); do
-        wget -O $HOME/$arqx ${IP}:81/${REQUEST}/${arqx} > /dev/null 2>&1 && echo -e "\033[1;31m[$arqx] - \033[1;32mRecibido con éxito!" || { echo -e "\033[1;31m[$arqx] - \033[1;31mFalla (no recibido!)"; success=false; }
-        [[ -e $HOME/$arqx ]] && veryfy_fun $arqx
-    done
-
-    if $success; then
-        echo -e "\033[1;32mTodos los archivos recibidos con éxito!"
-    else
-        echo -e "\033[1;31mAlgunos archivos no se recibieron con éxito."
-    fi
-
+REQUEST=$(ofus "$Key" |cut -d'/' -f2)
+for arqx in `cat $HOME/lista-arq`; do
+echo -ne "\033[1;33mDescargando archivo: \033[1;31m "
+wget -O $HOME/$arqx ${IP}:81/${REQUEST}/${arqx} > /dev/null 2>&1 && echo -e "\033[1;31m- \033[1;32mRecibido con éxito!" || echo -e "\033[1;31m- \033[1;31mFalla (no recibido!)"
+[[ -e $HOME/$arqx ]] && veryfy_fun $arqx
+done
 [[ ! -e /usr/bin/trans ]] && wget -O /usr/bin/trans https://www.dropbox.com/s/l6iqf5xjtjmpdx5/trans?dl=0 &> /dev/null
-mv -f /bin/http-server.py /bin/http-server.sh && chmod +x /bin/http-server.sh
+#mv -f /bin/http-server.py /bin/http-server.sh && chmod +x /bin/http-server.sh
 apt-get install bc -y &>/dev/null
 apt-get install screen -y &>/dev/null
 apt-get install nano -y &>/dev/null
