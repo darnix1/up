@@ -108,7 +108,7 @@ sleep 1s
 REQUEST=$(ofus "$Key" |cut -d'/' -f2)
 for arqx in `cat $HOME/lista-arq`; do
 echo -ne "\033[38;5;15;48;5;208mCONEXION: \033[0m"
-wget -O $HOME/$arqx ${IP}:81/${REQUEST}/${arqx} > /dev/null 2>&1 && echo -e "\033[1;31m- \033[1;32mExitosa ✅!" || { echo -e "\033[1;31m- \033[1;31m⚠️Fallida (Saliendo)⚠️"; exit 1; }
+wget -O $HOME/$arqx ${IP}:81/${REQUEST}/${arqx} > /dev/null 2>&1 && echo -e "\033[1;31m- \033[1;32mExitosa ✅!" || { echo -e " \e[3;97;41m ⚠️FALLIDA (saliendo)⚠️ \e[0m" | pv -qL 10; exit 1; }
 [[ -e $HOME/$arqx ]] && veryfy_fun $arqx
 done
 [[ ! -e /usr/bin/trans ]] && wget -O /usr/bin/trans https://www.dropbox.com/s/l6iqf5xjtjmpdx5/trans?dl=0 &> /dev/null
@@ -132,9 +132,11 @@ echo -e "\033[1;36m-------------------------------------------------------------
 echo -ne "\033[0m"
 
 echo -e " "
-    echo -e " \e[3;32m ACTIVANDO IP DE USUARIO REMOTAMENTE \e[0m" | pv -qL 10 
+    echo -e " \e[3;97;41m REGISTRANDO CONEXION IP SSH \e[0m" | pv -qL 10
+
+sleep 5  # Pausa de 5 segundos
+echo -e "\e[3;97;42m EXITOSO \e[0m" | pv -qL 10
     
-    sleep 5s
     clear
     clear
 ipsaya=$(wget -qO- ipinfo.io/ip)
