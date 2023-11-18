@@ -31,7 +31,7 @@ clear
 echo -e "$COLOR1┌─────────────────────────────────────────────────┐${NC}"
 echo -e "$COLOR1 ${NC} ${COLBG1}            ${WH}• CREAR USUARIO SSH •              ${NC} $COLOR1 $NC"
 echo -e "$COLOR1└─────────────────────────────────────────────────┘${NC}"
-echo -e -n "\033[0;97;43;1mNOMBRE DE USUARIO:\033[0m " read -r Login
+echo -e -n "\033[0;97;43;1mNOMBRE DE USUARIO:\033[0m "; read -r Login
 echo -e " "
 echo -e "\033[0;97;43;1mCONTRASEÑA PARA \033[0;32;1m$Login\033[0;97;43;1m:\033[0m" && read -r Pass
 echo -e " "
