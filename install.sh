@@ -31,84 +31,16 @@ clear
 echo -e "$COLOR1┌─────────────────────────────────────────────────┐${NC}"
 echo -e "$COLOR1 ${NC} ${COLBG1}            ${WH}• CREAR USUARIO SSH •              ${NC} $COLOR1 $NC"
 echo -e "$COLOR1└─────────────────────────────────────────────────┘${NC}"
-tput setaf 7
-    tput setab 4
-    tput bold
-    printf '%30s%s%-15s\n' "Crear Usuario SSH"
-    tput sgr0
-    echo ""
-    echo -ne "\033[1;32m🗣 Nombre de Usuário:\033[1;37m "
-    read username
-    [[ -z $username ]] && {
-        echo -e "\n${cor1}Nombre de Usuário vacio o invalido!${scor}\n"
-        exit 1
-    }
-    [[ "$(grep -wc $username /etc/passwd)" != '0' ]] && {
-        echo -e "\n${cor1}Este Usuário yá existe. Intente con Otro Nombre!${scor}\n"
-        exit 1
-    }
-    [[ ${username} != ?(+|-)+([a-zA-Z0-9]) ]] && {
-        echo -e "\n${cor1}Usted digito un nombre de usuário inválido!${scor}"
-        echo -e "${cor1}No use Espacios, Acentos o Caracteres Especiales!${scor}\n"
-        exit 1
-    }
-    sizemin=$(echo ${#username})
-    [[ $sizemin -lt 2 ]] && {
-        echo -e "\n${cor1}Usted digito un Nombre de usuário muy corto${scor}"
-        echo -e "${cor1}use un mínimo de dos caracteres!${scor}\n"
-        exit 1
-    }
-    sizemax=$(echo ${#username})
-    [[ $sizemax -gt 10 ]] && {
-        echo -e "\n${cor1}Usted digito un nombre de usuário muy grande"
-        echo -e "${cor1}use un máximo de 10 caracteres!${scor}\n"
-        exit 1
-    }
-    echo -ne "\033[1;32m🔐 Contraseña:\033[1;37m "
-    read password
-    [[ -z $password ]] && {
-        echo -e "\n${cor1}Contraseña vacia o invalida!${scor}\n"
-        exit 1
-    }
-    sizepass=$(echo ${#password})
-    [[ $sizepass -lt 4 ]] && {
-        echo -e "\n${cor1}Contraseña muy corta!, use un mínimo de 4 caracteres${scor}\n"
-        exit 1
-    }
-    echo -ne "\033[1;32m⏳ Dias para expirar:\033[1;37m "
-    read dias
-    [[ -z $dias ]] && {
-        echo -e "\n${cor1}Numero de dias vacio!${scor}\n"
-        exit 1
-    }
-    [[ ${dias} != ?(+|-)+([0-9]) ]] && {
-        echo -e "\n${cor1}Usted digito un número de dias inválido!${scor}\n"
-        exit 1
-    }
-    [[ $dias -lt 1 ]] && {
-        echo -e "\n${cor1}El número debe ser mayor que cero!${scor}\n"
-        exit 1
-    }
-    echo -ne "\033[1;32m📲 Limite de conexiones:\033[1;37m "
-    read sshlimiter
-    [[ -z $sshlimiter ]] && {
-        echo -e "\n${cor1}Usted dejo el limite de conexiones vacio!${scor}\n"
-        exit 1
-    }
-    [[ ${sshlimiter} != ?(+|-)+([0-9]) ]] && {
-        echo -e "\n${cor1}Usted digito un numero de conexiones inválido!${scor}\n"
-        exit 1
-    }
-    [[ $sshlimiter -lt 1 ]] && {
-        echo -e "\n${cor1}Número de conexiones simultaneas debe ser mayor que cero!${scor}\n"
-        exit 1
-    }
-    echo -ne "\033[1;32m💲 VALOR:\033[1;37m "
-    read vl
-    [[ -z $vl ]] && {
-        echo -e "\n${cor1}Valor vacio o invalido!${scor}\n"
-        exit 1
-    }
+echo -e -n "\033[0;97;43;1mNOMBRE DE USUARIO:\033[0m "
+read -r Login
+echo -e "\033[0;97;43;1mCONTRASEÑA PARA :\033[0m \033[0;32;1m$Login\033[0;97;43;1m \033[0m"
+read -r Pass
+echo -e "\033[0;97;43;1mLIMITE DE CONEXIONES PARA \033[0m\033[0;32;1m$Login\033[0;97;43;1m:\033[0m"
+read -r iplimit
+echo -e "\033[0;97;43;1mLIMITE DE GB PARA \033[0m\033;32;1m$Login\033[0;97;43;1m:\033[0m"
+read -r Quota
+echo -e "\033[0;97;43;1mDURACION PARA EL USUARIO \033[0m\033[0;32;1m$Login\033[0;97;43;1m:\033[0m"
+read -r masaaktif
 #limitip
 if [[ $iplimit -gt 0 ]]; then
 mkdir -p /etc/kyt/limit/ssh/ip
