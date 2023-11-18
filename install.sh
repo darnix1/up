@@ -31,8 +31,7 @@ clear
 echo -e "$COLOR1┌─────────────────────────────────────────────────┐${NC}"
 echo -e "$COLOR1 ${NC} ${COLBG1}            ${WH}• CREAR USUARIO SSH •              ${NC} $COLOR1 $NC"
 echo -e "$COLOR1└─────────────────────────────────────────────────┘${NC}"
-
-echo -n "NOMBRE DE USUARIO: "; read Login
+echo -e -n "\033[0;97;43;1mNOMBRE DE USUARIO:\033[0m "; read -r Login
 read -p "CONTRASEÑA PARA $Login: " Pass
 read -p "LIMITE DE CONEXIONES PARA $Login: " iplimit
 read -p "LIMITE DE GB PARA $Login: " Quota
