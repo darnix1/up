@@ -211,10 +211,71 @@ msg -bar2 && msg -verm "ERROR de enlace VPS<-->GENERADOR" && msg -bar2
 exit 1
 }
 invalid_key () {
-msg -bar2 && msg -verm "#¡Key Invalida#! " && msg -bar2
-[[ -e $HOME/lista-arq ]] && rm $HOME/lista-arq
-exit 1
+[[ -e $HOME/lista-arq ]] && list_fix="$(cat < $HOME/lista-arq)" || list_fix=''
+echo -e ' '
+msg -bar 
+#echo -e "\033[41m     --      SISTEMA ACTUAL $(lsb_release -si) $(lsb_release -sr)      --"
+echo -e " \033[41m-- CPU :$(lscpu | grep "Vendor ID" | awk '{print $3}') SISTEMA : $(lsb_release -si) $(lsb_release -sr) --"
+[[ "$list_fix" = "" ]] && {
+msg -bar 
+echo -e " ERROR (PORT 8888 TCP) ENTRE GENERADOR <--> VPS "
+echo -e "    NO EXISTE CONEXION ENTRE EL GENERADOR "
+echo -e "  - \e[3;32mGENERADOR O KEYGEN COLAPZADO\e[0m - "
 }
+[[ "$list_fix" = "KEY INVALIDA!" ]] && {
+IiP="$(ofus "$Key" | grep -vE '127\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}' | grep -o -E '[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}')"
+cheklist="$(curl -sSL $IiP:81/ChumoGH/checkIP.log)"
+chekIP="$(echo -e "$cheklist" | grep ${Key} | awk '{print $3}')"
+chekDATE="$(echo -e "$cheklist" | grep ${Key} | awk '{print $7}')"
+msg -bar
+echo ""
+[[ ! -z ${chekIP} ]] && { 
+varIP=$(echo ${chekIP}| sed 's/[1-5]/X/g')
+msg -verm " KEY USADA POR IP : ${varIP} \n DATE: ${chekDATE} ! "
+echo ""
+msg -bar
+} || {
+echo -e "    PRUEBA COPIAR BIEN TU KEY "
+[[ $(echo "$(ofus "$Key"|cut -d'/' -f2)" | wc -c ) = 18 ]] && echo -e "" || echo -e "\033[1;31m CONTENIDO DE LA KEY ES INCORRECTO"
+echo -e "   KEY NO COINCIDE CON EL CODEX DEL ADM "
+msg -bar
+tput cuu1 && tput dl1
+}
+}
+msg -bar
+[[ $(echo "$(ofus "$Key"|cut -d'/' -f2)" | wc -c ) = 18 ]] && echo -e "" || echo -e "\033[1;31m CONTENIDO DE LA KEY ES INCORRECTO"
+[[ -e $HOME/lista-arq ]] && rm $HOME/lista-arq
+cd $HOME 
+[[ -e ${SCPinstal} ]] && rm -rf ${SCPinstal}
+[[ -d $HOME/chumogh ]] && rm -rf $HOME/chumogh
+[[ -d ${SCPdir} ]] && rm -rf ${SCPdir}
+[[ -d $HOME/chumogh ]] && rm -rf $HOME/chumogh
+[[ -e /bin/menu ]] && rm /bin/menu
+[[ -e $HOME/chumogh ]] && rm -rf $HOME/chumogh
+[[ -e $HOME/log.txt ]] && rm -f $HOME/log.txt
+[[ -e /bin/troj.sh ]] && rm -f /bin/troj.sh
+[[ -e /bin/v2r.sh ]] && rm -f /bin/v2r.sh
+[[ -e /bin/clash.sh ]] && rm -f /bin/clash.sh
+rm -f instala.*  > /dev/null
+rm -f /bin/cgh > /dev/null
+rm -rf /bin/ejecutar > /dev/null
+figlet " Key Invalida" | boxes -d stone -p a2v1 > error.log
+msg -bar >> error.log
+echo "  Key Invalida, Contacta con tu Provehedor" >> error.log
+echo -e ' https://t.me/drowkid01 | @drowkid01' >> error.log
+msg -bar >> error.log
+cat error.log | lolcat
+#msg -bar
+echo -e "    \033[1;44m  Deseas Reintentar con OTRA KEY\033[0;33m  :v"
+echo -ne "\033[0;32m "
+read -p "  Responde [ s | n ] : " -e -i "n" x
+[[ $x = @(s|S|y|Y) ]] && funkey || return
+}
+
+
+
+
+
 while [[ ! $Key ]]; do
 msg -bar2 && msg -ne "# DIGITE LA KEY #: " && read Key
 tput cuu1 && tput dl1
