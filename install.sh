@@ -31,16 +31,17 @@ clear
 echo -e "$COLOR1┌─────────────────────────────────────────────────┐${NC}"
 echo -e "$COLOR1 ${NC} ${COLBG1}            ${WH}• CREAR USUARIO SSH •              ${NC} $COLOR1 $NC"
 echo -e "$COLOR1└─────────────────────────────────────────────────┘${NC}"
-echo -e -n "\033[0;97;43;1mNOMBRE DE USUARIO:\033[0m "; read -r Login
-echo -e " "
-echo -e "\033[0;97;43;1mCONTRASEÑA PARA \033[0;32;1m$Login\033[0;97;43;1m:\033[0m" read -r Pass
-echo -e " "
-echo -e "\033[0;97;43;1mLIMITE DE CONEXIONES PARA \033[0m " read -r iplimit
-echo -e " "
-echo -e "\033[0;97;43;1mLIMITE DE GB PARA \033[0m " read -r Quota
-echo -e " "
-echo -e "\033[0;97;43;1mDURACION PARA EL USUARIO \033[0m " read -r masaaktif
-#limitip
+
+echo -n "\033[0;97;43;1mNOMBRE DE USUARIO:\033[0m "; read Login
+
+read -p "\033[0;97;43;1mCONTRASEÑA PARA:\033[0m $Login: " Pass
+
+read -p "\033[0;97;43;1mLIMITE DE CONEXIONES:\033[0m " iplimit
+
+read -p "\033[0;97;43;1mLIMITE DE GB PARA:\033[0m $Login" Quota
+
+read -p "\033[0;97;43;1mDURACION DEL USUARIO:\033[0m " masaaktif
+
 if [[ $iplimit -gt 0 ]]; then
 mkdir -p /etc/kyt/limit/ssh/ip
 echo -e "$iplimit" > /etc/kyt/limit/ssh/ip/$Login
