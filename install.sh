@@ -32,15 +32,10 @@ echo -e "$COLOR1┌────────────────────�
 echo -e "$COLOR1 ${NC} ${COLBG1}            ${WH}• CREAR USUARIO SSH •              ${NC} $COLOR1 $NC"
 echo -e "$COLOR1└─────────────────────────────────────────────────┘${NC}"
 echo -e -n "\033[0;97;43;1mNOMBRE DE USUARIO:\033[0m "; read Login
-echo
-echo -e "\033[0;97;43;1mCONTRASEÑA PARA:\033[0m $Login: "; read Pass
-echo
-echo -e "\033[0;97;43;1mLIMITE DE CONEXIONES:\033[0m "; read iplimit
-echo
-echo -e "\033[0;97;43;1mLIMITE DE GB PARA:\033[0m $Login"; read Quota
-echo
-echo -e "\033[0;97;43;1mDURACION DEL USUARIO:\033[0m "; read masaaktif
-
+read -p "CONTRASEÑA PARA $Login: " Pass
+read -p "LIMITE DE CONEXIONES : " iplimit
+read -p "LIMITE DE GB PARA $Login : " Quota
+read -p "DURACION PARA $Login: " masaaktif
 if [[ $iplimit -gt 0 ]]; then
 mkdir -p /etc/kyt/limit/ssh/ip
 echo -e "$iplimit" > /etc/kyt/limit/ssh/ip/$Login
