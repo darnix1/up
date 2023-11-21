@@ -215,9 +215,9 @@ echo -e " $COLOR1│$NC ${WH}[${COLOR1}07${WH}]${NC} ${WH} BOT PANEL$NC       $C
 echo -e " $COLOR1│$NC ${WH}[${COLOR1}08${WH}]${NC} ${WH} BOT NOTIF$NC       $COLOR1|$NC ${WH}[${COLOR1}16${WH}]${NC} ${WH} UPDATE SCRIPT      $NC"  
 echo -e " $COLOR1╰═════════════════════════════════════════════════╯${NC}"
 echo -e " $COLOR1╭═════════════════════════════════════════════════╮${NC}"
-echo -e " $COLOR1│$NC${WH} Version$NC       ${WH}=$NC $a $stl"  
-echo -e " $COLOR1│$NZ${WK} Reseller$NZ      ${WK}=$NZ $author"
-echo -e " $COLOR1│$NC${WH} Estado Actual$NC ${WH}=$NC $sts "
+echo -e " $COLOR9│$NC${WH} Version$NC       ${WH}=$NC $a $stl"  
+echo -e " $COLOR9│$NZ${WK} Reseller$NZ      ${WK}=$NZ $author"
+echo -e " $COLOR9│$NC${WH} Estado Actual$NC ${WH}=$NC $sts "
 echo -e " $COLOR1╰═════════════════════════════════════════════════╯${NC}"
 echo
 read -p " Selecciona una opcion : " opt
