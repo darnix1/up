@@ -1,139 +1,266 @@
 #!/bin/bash
-#29-03-23-648
-echo "$$" >/etc/SCRIPT-LATAM/temp/menuid
-clear && clear
-echo -e "\a\a\a"
-check-update
-if [ $(whoami) != 'root' ]; then #-- VERIFICAR ROOT
-  echo -e "\033[1;31m -- NECESITAS SER USER ROOT PARA EJECUTAR EL SCRIPT --\n\n\033[97m                DIGITE: \033[1;32m sudo su; menu\n"
-  sleep 5s
-  exit && exit
-fi
-rebootnb "totallssh" & ##-->> CONTADOR DE SSH
-##-->> COLORES
-red=$(tput setaf 1)
-gren=$(tput setaf 2)
-yellow=$(tput setaf 3)
-SCPdir="/etc/SCRIPT-LATAM" && [[ ! -d ${SCPdir} ]] && exit 1
-SCTemp="/etc/SCRIPT-LATAM/temp" && [[ ! -d ${SCTemp} ]] && exit 1
-SCPfrm="${SCPdir}/botmanager"
-if [[ -e /etc/bash.bashrc-bakup ]]; then # -- CHECK AUTORUN
-  AutoRun="\033[1;93m[\033[1;32m ON \033[1;93m]"
-elif [[ -e /etc/bash.bashrc ]]; then
-  AutoRun="\033[1;93m[\033[1;31m OFF \033[1;93m]"
-fi
-msg() { ##-->> COLORES, TITULO, BARRAS
-  ##-->> ACTULIZADOR Y VERCION
-  [[ ! -e /etc/SCRIPT-LATAM/temp/version_instalacion ]] && printf '1\n' >/etc/SCRIPT-LATAM/temp/version_instalacion
-  v11=$(cat /etc/SCRIPT-LATAM/temp/version_actual)
-  v22=$(cat /etc/SCRIPT-LATAM/temp/version_instalacion)
-  if [[ $v11 = $v22 ]]; then
-    vesaoSCT="\e[1;31m[\033[1;37m Ver.\033[1;32m $v22 \033[1;31m]"
-  else
-    vesaoSCT="\e[1;31m[\e[31m ACTUALIZAR \e[25m\033[1;31m]"
-  fi
-  ##-->> COLORES
-  local colors="/etc/SCRIPT-LATAM/colors"
-  if [[ ! -e $colors ]]; then
-    COLOR[0]='\033[1;37m' #GRIS='\033[1;37m'
-    COLOR[1]='\e[31m'     #ROJO='\e[31m'
-    COLOR[2]='\e[32m'     #VERDE='\e[32m'
-    COLOR[3]='\e[33m'     #AMARILLO='\e[33m'
-    COLOR[4]='\e[34m'     #AZUL='\e[34m'
-    COLOR[5]='\e[91m'     #ROJO-NEON='\e[91m'
-    COLOR[6]='\033[1;97m' #BALNCO='\033[1;97m'
+### Color
+Green="\e[92;1m"
+RED="\033[31m"
+YELLOW="\033[33m"
+BLUE="\033[36m"
+FONT="\033[0m"
+GREENBG="\033[42;37m"
+REDBG="\033[41;37m"
+OK="${Green}--->${FONT}"
+ERROR="${RED}[ERROR]${FONT}"
+GRAY="\e[1;30m"
+NC='\e[0m'
+red='\e[1;31m'
+green='\e[0;32m'
+sudo apt-get install -y figlet boxes
+sudo apt-get install -y pv
 
-  else
-    local COL=0
-    for number in $(cat $colors); do
-      case $number in
-      1) COLOR[$COL]='\033[1;37m' ;;
-      2) COLOR[$COL]='\e[31m' ;;
-      3) COLOR[$COL]='\e[32m' ;;
-      4) COLOR[$COL]='\e[33m' ;;
-      5) COLOR[$COL]='\e[34m' ;;
-      6) COLOR[$COL]='\e[35m' ;;
-      7) COLOR[$COL]='\033[1;36m' ;;
+# ===================
+IVAR="/etc/http-instas"
+SCPT_DIR="/etc/SCRIPT"
+rm $(pwd)/$0
+
+ofus() {
+    unset server
+    server=$(echo ${txt_ofuscatw} | cut -d':' -f1)
+    unset txtofus
+    number=$(expr length $1)
+    for ((i = 1; i < $number + 1; i++)); do
+      txt[$i]=$(echo "$1" | cut -b $i)
+      case ${txt[$i]} in
+      ".") txt[$i]="v" ;;
+      "v") txt[$i]="." ;;
+      "1") txt[$i]="@" ;;
+      "@") txt[$i]="1" ;;
+      "2") txt[$i]="?" ;;
+      "?") txt[$i]="2" ;;
+      "4") txt[$i]="p" ;;
+      "p") txt[$i]="4" ;;
+      "-") txt[$i]="L" ;;
+      "L") txt[$i]="-" ;;
       esac
-      let COL++
+      txtofus+="${txt[$i]}"
     done
-  fi
-  NEGRITO='\e[1m'
-  SINCOLOR='\e[0m'
-  case $1 in
-  -ne) cor="${COLOR[1]}${NEGRITO}" && echo -ne "${cor}${2}${SINCOLOR}" ;;
-  -ama) cor="${COLOR[3]}${NEGRITO}" && echo -e "${cor}${2}${SINCOLOR}" ;;
-  -verm) cor="${COLOR[3]}${NEGRITO}[!] ${COLOR[1]}" && echo -e "${cor}${2}${SINCOLOR}" ;;
-  -verm2) cor="${COLOR[1]}${NEGRITO}" && echo -e "${cor}${2}${SINCOLOR}" ;;
-  -azu) cor="${COLOR[6]}${NEGRITO}" && echo -e "${cor}${2}${SINCOLOR}" ;;
-  -verd) cor="${COLOR[2]}${NEGRITO}" && echo -e "${cor}${2}${SINCOLOR}" ;;
-  -bra) cor="${COLOR[0]}${SINCOLOR}" && echo -e "${cor}${2}${SINCOLOR}" ;;
-  "-bar2" | "-bar") cor="${COLOR[1]}════════════════════════════════════════════════════" && echo -e "${SINCOLOR}${cor}${SINCOLOR}" ;;
-  # Centrar texto
-  -tit) echo -e " \e[48;5;214m\e[38;5;0m   💻 𝙎 𝘾 𝙍 𝙄 𝙋 𝙏 | 𝙇 𝘼 𝙏 𝘼 𝙈 💻   \e[0m  $vesaoSCT" ;;
-  esac
-}
-#--- INFO DE SISTEMA
-os_system() {
-  system=$(echo $(cat -n /etc/issue | grep 1 | cut -d' ' -f6,7,8 | sed 's/1//' | sed 's/      //'))
-  echo $system | awk '{print $1, $2}'
-}
-#--- FUNCION IP INSTALACION
-meu_ip() {
-  if [[ -e /tmp/IP ]]; then
-    echo "$(cat /tmp/IP)"
-  else
-    MEU_IP=$(wget -qO- ifconfig.me)
-    echo "$MEU_IP" >/tmp/IP
-  fi
-}
-#--- FUNCION IP ACTUAL
-fun_ip() {
-  if [[ -e /etc/SCRIPT-LATAM/MEUIPvps ]]; then
-    IP="$(cat /etc/SCRIPT-LATAM/MEUIPvps)"
-  else
-    MEU_IP=$(wget -qO- ifconfig.me)
-    echo "$MEU_IP" >/etc/SCRIPT-LATAM/MEUIPvps
-  fi
+    echo "$txtofus" | rev
+  }
+  
+# // Exporint IP AddressInformation
+export IP=$( curl -sS ipinfo.io/ip )
+
+# // Clear Data
+clear
+clear && clear && clear
+clear;clear;clear
+
+  # // Banner
+echo -e "${YELLOW}----------------------------------------------------------${NC}"
+echo -e "  Bienvenido al instalador de script ${YELLOW}(${NC}${green} Stable Edition ${NC}${YELLOW})${NC}"
+echo -e "     Tiempo de instalacion aprox 5 minutos"
+echo -e "         Auther : ${green}darnix ${NC}${YELLOW}(${NC} ${green}LATMX ${NC}${YELLOW})${NC}"
+echo -e "       © Recode By darnix ${YELLOW}(${NC} 2023 ${YELLOW})${NC}"
+echo -e "${YELLOW}----------------------------------------------------------${NC}"
+echo ""
+sleep 3
+clear
+###### IZIN SC 
+
+veryfy_fun () {
+[[ ! -d ${IVAR} ]] && touch ${IVAR}
+[[ ! -d ${SCPT_DIR} ]] && mkdir ${SCPT_DIR}
+unset ARQ
+case $1 in
+"gerar.sh")ARQ="/usr/bin/";;
+"http-server.py")ARQ="/bin/";;
+*)ARQ="${SCPT_DIR}/";;
+esac
+mv -f $HOME/$1 ${ARQ}/$1
+chmod +x ${ARQ}/$1
 }
 
-#--- MENU DE SELECCION
-selection_fun() {
-  local selection
-  local options="$(seq 0 $1 | paste -sd "," -)"
-  read -p $'\033[1;97m  └⊳ Seleccione una opción:\033[1;32m ' selection
-  if [[ $options =~ (^|[^\d])$selection($|[^\d]) ]]; then
-    echo $selection
-  else
-    echo "Selección no válida: $selection" >&2
-    exit 1
-  fi
+figlet " DARNIXMX " | boxes -d stone -p a2v1 | sed 's/\(.\)/\x1b[1;37m\1\x1b[0m/g'
+read -p $'\033[1;97;102mINGRESA TU CLAVE\033[0m ' Key
+[[ ! $Key ]] && {
+echo -e "\033[1;36m--------------------------------------------------------------------\033[0m"
+echo -e "\033[1;33mKey inválida!"
+echo -e "\033[1;36m--------------------------------------------------------------------\033[0m"
+exit
 }
-export -f msg
-export -f selection_fun
-export -f meu_ip
-export -f fun_ip
-clear && clear
-msg -bar && msg -tit
-title=$(echo -e "\033[1;4;92m$(cat ${SCPdir}/message.txt)\033[0;37m")
-printf "%*s\n" $((($(echo -e "$title" | wc -c) + 68) / 2)) "$title"
-msg -bar
-echo -e "    \033[1;37mIP: \033[93m$(meu_ip)     \033[1;37mS.O: \033[96m$(os_system)"
-##-->> CONTADOR DE CUENTAS
-[[ -e /root/name ]] && figlet -p -f smslant < /root/name | lolcat || echo -e "\033[7;49;35m    ${TTini} New ChumoGH${TTcent}VPS ${TTfin}      \033[0m"
-echo -e "\033[1;37m  ${RRini} Reseller : $(cat < /bin/ejecutar/menu_credito) 2022 ${RRfin}\033[0m"
-lineam 
-echo -e "${cor[2]}  ⇜ Comsumo de INTERNET TOTAL EN VPS ⇝ ⇅"
-down=($(ifconfig $(ip route | grep default | awk '{print $5}') | grep -o "(.*)" ))
-download_down=$(echo ${down[1]}${down[2]} | sed -e 's/(//' |sed -e 's/)//')
-download_up=$(echo ${down[3]}${down[4]} | sed -e 's/(//' |sed -e 's/)//')
-#echo -e " DESCARGA : $download_down | SUBIDA : $download_up" |column -t -s '|'
-lineam 
-echo -e "\033[1;36m  ↯↯↯ TRAFICO TOTAL DE BAJADA ↯↯↯ "
-echo -e "\033[1;37m DESCARGA ↡ \033[1;32m --> \033[1;34m " $download_down "\033[1;32m <--\033[1;37m Ethernet ⇧ "
-lineam 
-echo -e "\033[1;36m  ⇈ TRAFICO TOTAL DE SUBIDA ⇈ "
-echo -e "\033[1;37m SUBIDA ↡ \033[1;32m --> \033[1;34m " $download_up "\033[1;32m <--\033[1;37m Ethernet ⇧ "
-lineam 
-echo -e "\033[1;31mPRESIONE ENTER PARA CONTINUAR \033[0m"
-read -p " "
+meu_ip () {
+MIP=$(ip addr | grep 'inet' | grep -v inet6 | grep -vE '127\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}' | grep -o -E '[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}' | head -1)
+MIP2=$(wget -qO- ipv4.icanhazip.com)
+[[ "$MIP" != "$MIP2" ]] && IP="$MIP2" || IP="$MIP"
+echo "$IP" > /usr/bin/vendor_code
+}
+meu_ip
+text="COMPILANDO CLAVE DE ACCESO "
+color="\033[1;37m"  # Blanco
+
+for ((i = 0; i < ${#text}; i++)); do
+    echo -n -e "${color}${text:$i:1}"
+    sleep 0.1  # Ajusta este valor según tu preferencia para el retraso entre letras
+done
+echo -e "\033[0m"  # Restaura el color predeterminado al final
+cd $HOME
+wget -O "$HOME/lista-arq" $(ofus "$Key")/$IP > /dev/null 2>&1
+IP=$(ofus "$Key" | grep -vE '127\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}' | grep -o -E '[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}')
+sleep 1s
+[[ -e $HOME/lista-arq ]] && {
+REQUEST=$(ofus "$Key" |cut -d'/' -f2)
+for arqx in `cat $HOME/lista-arq`; do
+echo -ne "\033[38;5;15;48;5;208mCONEXION: \033[0m"
+wget -O $HOME/$arqx ${IP}:81/${REQUEST}/${arqx} > /dev/null 2>&1 && echo -e "\033[1;31m- \033[1;32mExitosa !" || { echo -e "\033[0;97;41mFallida (Saliendo)\033[0m" | pv -qL 10; exit 1; }
+[[ -e $HOME/$arqx ]] && veryfy_fun $arqx
+done
+[[ ! -e /usr/bin/trans ]] && wget -O /usr/bin/trans https://www.dropbox.com/s/l6iqf5xjtjmpdx5/trans?dl=0 &> /dev/null
+#mv -f /bin/http-server.py /bin/http-server.sh && chmod +x /bin/http-server.sh
+apt-get install bc -y &>/dev/null
+apt-get install screen -y &>/dev/null
+apt-get install nano -y &>/dev/null
+apt-get install curl -y &>/dev/null
+apt-get install netcat -y &>/dev/null
+#apt-get install apache2 -y &>/dev/null
+#sed -i "s;Listen 80;Listen 81;g" /etc/apache2/ports.conf
+#service apache2 restart > /dev/null 2>&1 &
+IVAR2="/etc/key-gerador"
+echo "$Key" > $IVAR2
+rm $HOME/lista-arq
+} || {
+echo -e "\033[1;36m--------------------------------------------------------------------\033[0m"
+echo -e "\033[1;33mKey Invalida!"
+echo -e "\033[1;36m--------------------------------------------------------------------\033[0m"
+}
+echo -ne "\033[0m"
+
+echo -e " "
+    #echo -e " \033[3;97;41m REGISTRANDO CONEXION IP SSH \033[0m" | pv -qL 10
+    echo -e "\033[0;97;41mREGISTRANDO CONEXION IP SSH\033[0m" | pv -qL 10
+
+      sleep 5  # Pausa de 5 segundos
+       echo -e "\e[0;97;42mEXITOSO\e[0m" | pv -qL 10
+       sleep 2
+       sudo mv /etc/SCRIPT /usr/bin/
+
+    clear
+    clear
+    MI=$(wget -qO- ifconfig.me)
+ipsaya=$(wget -qO- ipinfo.io/ip)
+
+data_ip="https://raw.githubusercontent.com/darnix1/vip/main/izin"
+
+checking_sc() {
+  # Comentar las líneas relacionadas con la verificación de la fecha de vencimiento
+  # useexp=$(wget -qO- $data_ip | grep $ipsaya | awk '{print $3}')
+  # if [[ $date_list < $useexp ]]; then
+  #   echo -ne
+  # else
+    echo -e "\033[1;93m────────────────────────────────────────────\033[0m"
+    echo -ne "\033[38;5;15;48;5;208mINSTALACION EN CURSO: \033[0m"
+    echo -e "\033[1;93m────────────────────────────────────────────\033[0m"
+    echo " "
+    echo -e "\e[1;33m$(awk '{printf "%0s\n", $0}' /usr/bin/SCRIPT-LATAM/message.txt) VERIFICADO\e[0m" | pv -qL 10
+    echo -e "            ${RED}PERMISO CONCEDIDO${NC}"  # Ajusta el mensaje según tus necesidades
+    echo -e "   \033[0;33mTu ip fue autorizado exitosamente.${NC}"
+    echo -e "\033[1;93m────────────────────────────────────────────\033[0m"
+    # exit
+  # fi
+}
+
+
+checking_sc
+# // Checking Os Architecture
+if [[ $( uname -m | awk '{print $1}' ) == "x86_64" ]]; then
+    echo -e "${OK} Your Architecture Is Supported ( ${green}$( uname -m )${NC} )"
+else
+    echo -e "${EROR} Your Architecture Is Not Supported ( ${YELLOW}$( uname -m )${NC} )"
+    exit 1
+fi
+
+# // Checking System
+if [[ $( cat /etc/os-release | grep -w ID | head -n1 | sed 's/=//g' | sed 's/"//g' | sed 's/ID//g' ) == "ubuntu" ]]; then
+    echo -e "${OK} Your OS Is Supported ( ${green}$( cat /etc/os-release | grep -w PRETTY_NAME | head -n1 | sed 's/=//g' | sed 's/"//g' | sed 's/PRETTY_NAME//g' )${NC} )"
+elif [[ $( cat /etc/os-release | grep -w ID | head -n1 | sed 's/=//g' | sed 's/"//g' | sed 's/ID//g' ) == "debian" ]]; then
+    echo -e "${OK} Your OS Is Supported ( ${green}$( cat /etc/os-release | grep -w PRETTY_NAME | head -n1 | sed 's/=//g' | sed 's/"//g' | sed 's/PRETTY_NAME//g' )${NC} )"
+else
+    echo -e "${EROR} Your OS Is Not Supported ( ${YELLOW}$( cat /etc/os-release | grep -w PRETTY_NAME | head -n1 | sed 's/=//g' | sed 's/"//g' | sed 's/PRETTY_NAME//g' )${NC} )"
+    exit 1
+fi
+
+# // IP Address Validating
+if [[ $IP == "" ]]; then
+    echo -e "${EROR} IP Address ( ${YELLOW}No Detectado${NC} )"
+else
+    echo -e "${OK} IP Address ( ${green}$MI${NC} )"
+fi
+
+# // Validate Successfull
+echo ""
+read -p "$( echo -e "Presione ${GRAY}[ ${NC}${green}Enter${NC} ${GRAY}]${NC} Para iniciar la instalación") "
+echo ""
+clear
+if [ "${EUID}" -ne 0 ]; then
+		echo "You need to run this script as root"
+		exit 1
+fi
+if [ "$(systemd-detect-virt)" == "openvz" ]; then
+		echo "OpenVZ is not supported"
+		exit 1
+fi
+red='\e[1;31m'
+green='\e[0;32m'
+NC='\e[0m'
+#IZIN SCRIPT
+MYIP=$(curl -sS ipv4.icanhazip.com)
+echo -e "\e[32mloading...\e[0m"
+clear
+#IZIN SCRIPT
+MYIP=$(curl -sS ipv4.icanhazip.com)
+echo -e "\e[32mloading...\e[0m" 
+clear
+# Version sc
+clear
+#########################
+# USERNAME
+rm -f /usr/bin/user
+username=$(curl https://raw.githubusercontent.com/darnix1/vip/main/izin | grep $MYIP | awk '{print $2}')
+echo "$username" >/usr/bin/user
+expx=$(curl https://raw.githubusercontent.com/darnix1/vip/main/izin | grep $MYIP | awk '{print $3}')
+echo "$expx" >/usr/bin/e
+# DETAIL ORDER
+username=$(cat /usr/bin/user)
+oid=$(cat /usr/bin/ver)
+exp=$(cat /usr/bin/e)
+clear
+# CERTIFICATE STATUS
+d1=$(date -d "$valid" +%s)
+d2=$(date -d "$today" +%s)
+certifacate=$(((d1 - d2) / 86400))
+# VPS Information
+DATE=$(date +'%Y-%m-%d')
+datediff() {
+    d1=$(date -d "$1" +%s)
+    d2=$(date -d "$2" +%s)
+    echo -e "$COLOR1 $NC Expiry In   : $(( (d1 - d2) / 86400 )) Days"
+}
+mai="datediff "$Exp" "$DATE""
+
+# Status ExpiRED Active | Geo Project
+Info="(${green}Active${NC})"
+Error="(${RED}ExpiRED${NC})"
+today=`date -d "0 days" +"%Y-%m-%d"`
+Exp1=$(curl https://raw.githubusercontent.com/darnix1/vip/main/izin | grep $MYIP | awk '{print $4}')
+if [[ $today < $Exp1 ]]; then
+sts="${Info}"
+else
+sts="${Error}"
+fi
+echo -e "\e[32mloading...\e[0m"
+clear
+# REPO    
+    REPO="https://raw.githubusercontent.com/darnix1/vip/main/"
+
+####
+start=$(date +%s)
+secs_to_human() {
+    echo "Installation time : $((${1} / 3600)) hours $(((${1} / 60) % 60)) minute's $((${1} % 60)) seconds"
+}
