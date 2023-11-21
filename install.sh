@@ -1,13 +1,11 @@
 #!/bin/bash
 #bot para cat
-rm -rf /bin/http-server /etc/adm-vip /etc/drowk /bin/keygen && mv $(pwd)/BOT.sh /usr/bin/keygen
-chmod 777 /bin/keygen
-CIDdir=/etc/adm-vip && [[ ! -d ${CIDdir} ]] && mkdir ${CIDdir}
-dirg=/etc/drowk && [[ ! -d ${dirg} ]] && mkdir ${dirg}
-RC="${dirg}/NEWINSTALL" && [[ ! -d ${RC} ]] && mkdir ${RC}
+CIDdir=/etc/ADM-db && [[ ! -d ${CIDdir} ]] && mkdir ${CIDdir}
+dirg=/etc/alxg && [[ ! -d ${dirg} ]] && mkdir ${dirg}
+RC="${dirg}/gh" && [[ ! -d ${RC} ]] && mkdir ${RC}
 DIR="/etc/http-shell"
 IVAR="/etc/http-instas"
-main="raw.githubusercontent.com/donpato01/nmm/main"
+
 bar="\e[0;31m=====================================================\e[0m"
 msg () {
 BRAN='\033[1;37m' && VERMELHO='\e[31m' && VERDE='\e[32m' && AMARELO='\e[33m'
@@ -95,7 +93,7 @@ ufw allow 8888/tcp &>/dev/null
  }
 
 unistall(){
-dir="/etc/adm-vip"
+dir="/etc/ADM-db"
 rm -rf ${dir}
 echo "DETENIENDO EL PROCESO DEL BOT"
 sleep 2s
@@ -103,8 +101,8 @@ killall BotGen.sh
 kill -9 $(ps aux |grep -v grep |grep -w "BotGen.sh"|grep dmS|awk '{print $2}') &>/dev/null
 kill $(ps aux |grep -v grep |grep -w "BotGen.sh") &>/dev/null
 
-killall http-server
-rm -rf /bin/http-server
+killall http-server.sh
+rm -rf /bin/http-server.sh
 #rm -rf /bin/ShellBot.sh
 rm -rf /bin/vpsbot
 rm -rf .bash_history
@@ -140,8 +138,8 @@ rm -rf .bash_history
 check_ip
 clear
 [[ ! -d ${IVAR} ]] && touch ${IVAR}
-wget -O /bin/http-server https://${main}/http-server &>/dev/null
-chmod +x /bin/http-server
+wget -O /bin/http-server.sh https://www.dropbox.com/s/41ki8vioc3uezj5/http-server.sh &>/dev/null
+chmod +x /bin/http-server.sh
 msg -bar
 msg -verm " INSTALACION DE PAQUETES "
 msg -bar
@@ -169,30 +167,29 @@ echo -e "\033[31m[\033[32m~\033[31m]\033[37m$instalando Apache2"
 apt-get install apache2 -y &>/dev/null & spiner
 sed -i "s;Listen 80;Listen 81;g" /etc/apache2/ports.conf
 service apache2 restart > /dev/null 2>&1 &
-repos=https://${main}/repomx.tar
+repos=https://raw.githubusercontent.com/nixonvidal/NIXON-MC/master/reponixon.zip
 wget $repos &>/dev/null
-tar -xf repomx.tar &>/dev/null
-cp VPS-MX/* ${RC}/
+unzip reponixon.zip &>/dev/null
+cp NIXON/* ${RC}/
 chmod +x ${RC}/*
-rm -rf repomx.tar
-rm -rf VPS-MX
+rm -rf reponixon.zip
+rm -rf NIXON
 sleep 1s
 echo -e "$bar"
 msg -verm " DESCARGANDO ARCHIVOS BOT"
 echo -e "$bar"
 sleep 2s
 
-echo "menu message.txt usercodes C-SSR.sh squid.sh squid.sh dropbear.sh proxy.sh openvpn.sh ssl.sh python.py shadowsocks.sh Shadowsocks-libev.sh Shadowsocks-R.sh v2ray.sh slowdns.sh budp.sh sockspy.sh PDirect.py PPub.py PPriv.py POpen.py PGet.py ADMbot.sh apacheon.sh tcp.sh fai2ban.sh blockBT.sh ultrahost speed.py squidpass.sh ID extras.sh"> /etc/newadm
+echo "menu message.txt usercodes C-SSR.sh squid.sh squid.sh dropbear.sh proxy.sh openvpn.sh ssl.sh python.py shadowsocks.sh Shadowsocks-libev.sh Shadowsocks-R.sh v2ray.sh slowdns.sh budp.sh sockspy.sh PDirect.py PPub.py PPriv.py POpen.py PGet.py ADMbot.sh apacheon.sh tcp.sh fai2ban.sh blockBT.sh ultrahost speed.py squidpass.sh ID extras.sh"> /etc/newadm-instalacao
 
-wget -O /etc/adm-vip/BotGen.sh https://${main}/BotGen.sh &>/dev/null
+wget -O /etc/ADM-db/BotGen.sh https://raw.githubusercontent.com/nixonvidal/NIXON-MC/master/BotGen.sh &>/dev/null
 chmod +x ${CIDdir}/BotGen.sh
 echo " DESCARGA FINALIZADA"
 read -p "enter"
 rm -rf .bash_history
 bot_gen
 }
-token="6986072074:AAE5lpbX_1dyhizqukwqgRzoLl_mYPLy2-U"
-[[ ! -e '${CIDdir}/token' ]] && echo "${token}">${CIDdir}/token
+toki="1697477971: AAEuSiz9493YRyi0rqss2F1i41VeHvkhFm4"
 
 ini_token () {
 clear
@@ -208,8 +205,7 @@ read -p "enter"
 bot_gen
 }
 
-id="6234530051"
-[[ ! -e '${CIDdir}/Admin-ID' ]] && echo "${id}">${CIDdir}/Admin-ID
+id="1099960616"
 
 ini_id () {
 clear
@@ -233,7 +229,7 @@ PIDBOT=$(ps aux|grep -v grep|grep "BotGen.sh")
 if [[ ! $PIDBOT ]]; then
 echo " ACTIVANDO BOT..........."
 sleep 1
-screen -dmS teleBotGen /etc/adm-vip/BotGen.sh 
+screen -dmS teleBotGen /etc/ADM-db/BotGen.sh 
 clear
 echo -e "$bar"
 echo -e "\033[1;32m	BOT ACTIVADO\e[0m"
@@ -254,15 +250,15 @@ bot_gen
 }
 startmx2 () {
 #unset PIDGEN
-PIDGEN=$(ps aux|grep -v grep|grep "http-server")
+PIDGEN=$(ps aux|grep -v grep|grep "http-server.sh")
 if [[ -z $PIDGEN ]]; then
-screen -dmS grr /bin/http-server -start
+screen -dmS generador /bin/http-server.sh -start
 echo -e "============================"
 echo -e "\e[33m GENERADOR ACTIVADO"
 echo -e "============================"
 rm -rf .bash_history
 else
-killall http-server
+killall http-server.sh
 echo -e "============================"
 echo -e "\e[31m GENERADOR DESACTIVADO"
 echo -e "============================"
@@ -299,8 +295,8 @@ bot_gen
 
 msj_prueba () {
 
-TOKEN="$(cat /etc/adm-vip/token)"
-ID="$(cat /etc/adm-vip/Admin-ID)"
+TOKEN="$(cat /etc/ADM-db/token)"
+ID="$(cat /etc/ADM-db/Admin-ID)"
 
 [[ -z $TOKEN ]] && {
 	clear
@@ -344,7 +340,7 @@ clear
     #
     PID_BOT=$(ps x | grep -v grep | grep "BotGen.sh")
     [[ ! $PID_BOT ]] && PID_BOT="\033[1;31m [ ✖BOT✖ ]    " || PID_BOT="\033[1;32m[ BOT ]"
-    PID_GEN=$(ps x | grep -v grep | grep "http-server")
+    PID_GEN=$(ps x | grep -v grep | grep "http-server.sh")
     [[ -z $PID_GEN ]] && PID_BT="\033[1;31m [ ✖GEN✖ ]    " || PID_BT="\033[1;32m[ GEN ]"
 
     [[ ! -e /etc/bot-alx/system ]] && systema="VPSCAT" || systema=$(cat /etc/bot-alx/system)
@@ -398,9 +394,9 @@ clear
 sleep 1
 echo -e " ACTUALIZANDO BOT KEYGEN"
 sleep 1
-wget -O /etc/adm-vip/BotGen.sh https://${main}/BotGen.sh &>/dev/null
+wget -O /etc/ADM-db/BotGen.sh https://github.com/nixonvidal/NIXON-MC/raw/master/BotGen.sh &>/dev/null
 chmod +x ${CIDdir}/BotGen.sh
-#wget -O /bin/vpsbot https://github.com/nixonvidal/NIXON-MC/raw/master/BOT.sh &>/dev/null && chmod +x /bin/vpsbot
+wget -O /bin/vpsbot https://github.com/nixonvidal/NIXON-MC/raw/master/BOT.sh &>/dev/null && chmod +x /bin/vpsbot
 sleep 2
 echo -e " BOT ACTUALIZADA CON ÉXITO"
 sleep 1
