@@ -159,7 +159,7 @@ text="INSTALACION EN CURSO:"
 padding=$(((cols - ${#text}) / 3))
     echo -e "\033[1;93m────────────────────────────────────────────\033[0m"
     echo -ne "\033[38;5;15;48;5;208m$(printf "%*s" $padding)${text}$(printf "%*s" $padding)\033[0m"
-    echo -e "\033[1;93m────────────────────────────────────────────\033[0m"
+    #echo -e "\033[1;93m────────────────────────────────────────────\033[0m"
     echo " "
     echo -e "\e[1;33m RESELLER: $(awk '{printf "%0s\n", $0}' /usr/bin/SCRIPT/message.txt) VERIFICADO \e[0m" | pv -qL 10
     echo -e "            ${RED}PERMISO CONCEDIDO${NC}"  # Ajusta el mensaje según tus necesidades
