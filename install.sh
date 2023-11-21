@@ -181,6 +181,9 @@ ver="\033[32m"
 bla="\033[37m"
 roj="\033[31m"
 res="\033[0m"
+COLOR9="\e[33m"
+NZ="\e[0m"
+WK="\e[97m"
 author=$(cat /usr/bin/SCRIPT/message.txt)
 
 r="\033[1;33m"  #REDTERANG
@@ -213,7 +216,7 @@ echo -e " $COLOR1│$NC ${WH}[${COLOR1}08${WH}]${NC} ${WH} BOT NOTIF$NC       $C
 echo -e " $COLOR1╰═════════════════════════════════════════════════╯${NC}"
 echo -e " $COLOR1╭═════════════════════════════════════════════════╮${NC}"
 echo -e " $COLOR1│$NC${WH} Version$NC       ${WH}=$NC $a $stl"  
-echo -e " $COLOR1│$NC${WH} Usuario$NC       ${WH}=$NC $author"
+echo -e " $COLOR1│$NZ${WK} Reseller$NZ      ${WK}=$NZ $author"
 echo -e " $COLOR1│$NC${WH} Estado Actual$NC ${WH}=$NC $sts "
 echo -e " $COLOR1╰═════════════════════════════════════════════════╯${NC}"
 echo
