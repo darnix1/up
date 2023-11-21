@@ -158,7 +158,7 @@ checking_sc() {
     echo -ne "\033[38;5;15;48;5;208mINSTALACION EN CURSO: \033[0m"
     echo -e "\033[1;93m────────────────────────────────────────────\033[0m"
     echo " "
-    echo -e "\e[1;33m$(awk '{printf "%0s\n", $0}' /usr/bin/SCRIPT-LATAM/message.txt) VERIFICADO\e[0m" | pv -qL 10
+    echo -e "\e[1;33m$(awk '{printf "%0s\n", $0}' /usr/bin/SCRIPT/message.txt) VERIFICADO\e[0m" | pv -qL 10
     echo -e "            ${RED}PERMISO CONCEDIDO${NC}"  # Ajusta el mensaje según tus necesidades
     echo -e "   \033[0;33mTu ip fue autorizado exitosamente.${NC}"
     echo -e "\033[1;93m────────────────────────────────────────────\033[0m"
