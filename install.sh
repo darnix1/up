@@ -1,48 +1,50 @@
 #!/bin/bash
-
-#install
-apt update && apt upgrade
-apt install python3 python3-pip git
-git clone https://github.com/rizyul/scupdate.git
-unzip scupdate/ftvpn.zip
-pip3 install -r ftvpn/requirements.txt
-pip3 install pillow
-
-#isi data
-echo "INSTALL BOT CREATE via TELEGRAM"
-read -e -p "[*] Input your Bot Token : " bottoken
-read -e -p "[*] Input Your Id Telegram :" admin
-read -e -p "[*] Input Your Domain :" domain
-echo -e BOT_TOKEN='"'$bottoken'"' >> /root/ftvpn/var.txt
-echo -e ADMIN='"'$admin'"' >> /root/ftvpn/var.txt
-echo -e DOMAIN='"'$domain'"' >> /root/ftvpn/var.txt
+red() { echo -e "\\033[32;1m${*}\\033[0m"; }
 clear
-echo "Done"
-echo "Your Data Bot"
-echo -e "==============================="
-echo "Api Token     : $bottoken"
-echo "ID            : $admin"
-echo "DOMAIN        : $domain"
-echo -e "==============================="
-echo "Setting done"
-
-cat > /etc/systemd/system/ftvpn.service << END
-[Unit]
-Description=Simple ftvpn - @rizulvpn
-After=network.target
-
-[Service]
-WorkingDirectory=/root
-ExecStart=/usr/bin/python3 -m ftvpn
-Restart=always
-
-[Install]
-WantedBy=multi-user.target
-END
-
-systemctl start ftvpn
-systemctl enable ftvpn
-
+echo "Checking VPS"
+sleep 2
 clear
-
-echo " Installations complete, type /menu on your bot"
+_APISERVER=127.0.0.1:10000
+_XRAY=/usr/sbin/xray
+apidata () {
+    local ARGS=
+    if [[ $1 == "reset" ]]; then
+      ARGS="-reset=false"
+    fi
+    $_XRAY api statsquery --server=$_APISERVER "${ARGS}" \
+    | awk '{
+        if (match($1, /"name":/)) {
+            f=1; gsub(/^"|link"|,$/, "", $2);
+            split($2, p,  ">>>");
+            printf "%s:%s->%s\t", p[1],p[2],p[4];
+        }
+        else if (match($1, /"value":/) && f){
+          f = 0;
+          gsub(/"/, "", $2);
+          printf "%.0f\n", $2;
+        }
+        else if (match($0, /}/) && f) { f = 0; print 0; }
+    }'
+}
+print_sum() {
+    local DATA="$1"
+    local PREFIX="$2"
+    local SORTED=$(echo "$DATA" | grep "^${PREFIX}" | sort -r)
+    local SUM=$(echo "$SORTED" | awk '
+        /->up/{us+=$2}
+        /->down/{ds+=$2}
+        END{
+            printf "USAGE:\t%.0f\n",  us+ds;
+        }')
+    echo -e "${SORTED}\n${SUM}" \
+    | numfmt --field=2  --suffix=B --to=iec \
+    | column -t
+}
+DATA=$(apidata $1)
+echo -e "\033[1;36m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\033[0m"
+echo -e " \e[1;97;101m            USAGE USER XRAY             \e[0m"
+echo -e "\033[1;36m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\033[0m$NC"
+print_sum "$DATA" "user" "$NC"
+echo -e ""
+read -n 1 -s -r -p "Press [enter] to back on menu vmess"
+vmess
