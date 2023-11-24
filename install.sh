@@ -43,20 +43,18 @@ echo -e "$COLOR1┌────────────────────�
 echo -e "$COLOR1 ${NC} ${COLBG1}            ${WH}• CREAR USUARIO VMESS•              ${NC} $COLOR1 $NC"
 echo -e "$COLOR1└─────────────────────────────────────────────────┘${NC}"
 
-		read -rp "Usuario: " -e user
-clear
-            echo -e "$COLOR1┌─────────────────────────────────────────────────┐${NC}"
-            echo -e "$COLOR1 ${NC} ${COLBG1}            ${WH}• CREAR USUARIO VMESS •              ${NC} $COLOR1 $NC"
-            echo -e "$COLOR1└─────────────────────────────────────────────────┘${NC}"
+		while [[ -z $user ]]; do
+    echo -e "$COLOR1┌─────────────────────────────────────────────────┐${NC}"
+    echo -e "$COLOR1 ${NC} ${COLBG1}            ${WH}• CREAR USUARIO VMESS •              ${NC} $COLOR1 $NC"
+    echo -e "$COLOR1└─────────────────────────────────────────────────┘${NC}"
 
-			echo ""
-			echo "El campo usuario esta vacío ."
-			echo ""
-			echo -e "$COLOR1━━━━━━━━━━━━━━━━━$NC"
-			read -n 1 -s -r -p "Presiona una tecla para ir al menu"
-      menu
-      fi
-      done 
+    echo ""
+    echo "El campo usuario está vacío."
+    echo ""
+    echo -e "$COLOR1━━━━━━━━━━━━━━━━━$NC"
+    read -n 1 -s -r -p "Presiona una tecla para ir al menú"
+    menu
+done
   
 		CLIENT_EXISTS=$(grep -w $user /etc/xray/config.json | wc -l)
 
