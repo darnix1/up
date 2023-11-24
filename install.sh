@@ -40,28 +40,23 @@ fi
 #none="$(cat ~/log-install.txt | grep -w "Vmess None TLS" | cut -d: -f2|sed 's/ //g')"
 until [[ $user =~ ^[a-zA-Z0-9_]+$ && ${CLIENT_EXISTS} == '0' ]]; do
 echo -e "$COLOR1┌─────────────────────────────────────────────────┐${NC}"
-echo -e "$COLOR1 ${NC} ${COLBG1}            ${WH}• CREAR USUARIO VMESS •              ${NC} $COLOR1 $NC"
+echo -e "$COLOR1 ${NC} ${COLBG1}            ${WH}• CREAR USUARIO VMESS•              ${NC} $COLOR1 $NC"
 echo -e "$COLOR1└─────────────────────────────────────────────────┘${NC}"
 
-read -rp "Usuario: " -e user
+		read -rp "Usuario: " -e user
+clear
+            echo -e "$COLOR1┌─────────────────────────────────────────────────┐${NC}"
+            echo -e "$COLOR1 ${NC} ${COLBG1}            ${WH}• CREAR USUARIO VMESS •              ${NC} $COLOR1 $NC"
+            echo -e "$COLOR1└─────────────────────────────────────────────────┘${NC}"
 
-if [[ -z $user ]]; then
-    while true; do
-        read -rp "Nombre de Usuario vacío. ¿Desea reintentar? (S/N): " -n 1 -r respuesta
-        echo  # Nueva línea después de la entrada del usuario
-
-        if [[ $respuesta =~ ^[Ss]$ ]]; then
-            addws
-        elif [[ $respuesta =~ ^[Nn]$ ]]; then
-            m-vmess
-            break  # Salir del bucle
-        else
-            echo -e "\nRespuesta no válida. Por favor, ingrese S o N.\n"
-        fi
-    
-
-
-
+			echo ""
+			echo "El campo usuario esta vacío ."
+			echo ""
+			echo -e "$COLOR1━━━━━━━━━━━━━━━━━$NC"
+			read -n 1 -s -r -p "Presiona una tecla para ir al menu"
+      menu
+      fi
+  
 		CLIENT_EXISTS=$(grep -w $user /etc/xray/config.json | wc -l)
 
 		if [[ ${CLIENT_EXISTS} == '1' ]]; then
