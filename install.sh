@@ -176,7 +176,7 @@ echo -e "$COLOR1└────────────────────�
 
 	
   while true; do
-      echo -ne "\e[37;100m\e[1;97m Agrega un Nombre: \e[0m"
+      echo -ne " Agrega un Nombre: "
       read -p " " user
       user="$(echo $user | sed -e 's/[^a-z0-9 -]//ig')"
       if [[ -z $user ]]; then
@@ -212,7 +212,7 @@ CITY=$(curl -s ipinfo.io/city )
 uuid=$(cat /proc/sys/kernel/random/uuid)
 #read -p "Expira en (dias): " masaaktif
 while true; do
-      echo -ne "\e[37;100m\e[1;97m Agrega los Dias: \e[0m" && read masaaktif
+      echo -ne " Agrega los Dias: " && read masaaktif
       if [[ -z "$masaaktif" ]]; then
         err_fun 17 && continue
       elif [[ "$masaaktif" != +([0-9]) ]]; then
