@@ -35,27 +35,183 @@ domain=$(cat /etc/xray/domain)
 else
 domain=$IP
 fi
-
+err_fun() {
+    case $1 in
+    1)
+      msg -verm "Usuario Nulo - Regresando al Menu SSH"
+      sleep 3s
+      tput cuu1
+      tput dl1
+      tput cuu1
+      tput dl1
+      ;;
+    2)
+      msg -verm "Usuario con nombre muy corto (5-15 Caracteres)"
+      sleep 2s
+      tput cuu1
+      tput dl1
+      tput cuu1
+      tput dl1
+      ;;
+    3)
+      msg -verm "Usuario con nombre muy grande (5-15 Caracteres)"
+      sleep 2s
+      tput cuu1
+      tput dl1
+      tput cuu1
+      tput dl1
+      ;;
+    4)
+      msg -verm "Contraseña Nula"
+      sleep 2s
+      tput cuu1
+      tput dl1
+      tput cuu1
+      tput dl1
+      ;;
+    5)
+      msg -verm "Contraseña muy corta (5-15 Caracteres)"
+      sleep 2s
+      tput cuu1
+      tput dl1
+      tput cuu1
+      tput dl1
+      ;;
+    6)
+      msg -verm "Contraseña muy grande (5-15 Caracteres)"
+      sleep 2s
+      tput cuu1
+      tput dl1
+      tput cuu1
+      tput dl1
+      ;;
+    7)
+      msg -verm "Duracion Nula"
+      sleep 2s
+      tput cuu1
+      tput dl1
+      tput cuu1
+      tput dl1
+      ;;
+    8)
+      msg -verm "Duracion invalida utilize numeros"
+      sleep 2s
+      tput cuu1
+      tput dl1
+      tput cuu1
+      tput dl1
+      ;;
+    9)
+      msg -verm "Duracion maxima y de un año"
+      sleep 2s
+      tput cuu1
+      tput dl1
+      tput cuu1
+      tput dl1
+      ;;
+    11)
+      msg -verm "Limite Nulo"
+      sleep 2s
+      tput cuu1
+      tput dl1
+      tput cuu1
+      tput dl1
+      ;;
+    12)
+      msg -verm "Limite invalido utilize numeros"
+      sleep 2s
+      tput cuu1
+      tput dl1
+      tput cuu1
+      tput dl1
+      ;;
+    13)
+      msg -verm "Limite maximo de 999"
+      sleep 2s
+      tput cuu1
+      tput dl1
+      tput cuu1
+      tput dl1
+      ;;
+    14)
+      msg -verm "Usuario Ya Existe"
+      sleep 2s
+      tput cuu1
+      tput dl1
+      tput cuu1
+      tput dl1
+      ;;
+    15)
+      msg -verm "HWID/Nombre Nulo (8-10 Caracteres)"
+      sleep 2s
+      tput cuu1
+      tput dl1
+      tput cuu1
+      tput dl1
+      ;;
+    16)
+      msg -verm "HWID Ya Existe"
+      sleep 2s
+      tput cuu1
+      tput dl1
+      tput cuu1
+      tput dl1
+      ;;
+    17)
+      msg -verm "TOKEN/Nombre Nulo (8-10 Caracteres)"
+      sleep 2s
+      tput cuu1
+      tput dl1
+      tput cuu1
+      tput dl1
+      ;;
+    18)
+      msg -verm "TOKEN Ya Existe"
+      sleep 2s
+      tput cuu1
+      tput dl1
+      tput cuu1
+      tput dl1
+      ;;
+    19)
+      msg -verm "User o Pass ya Ocupado reintente con Otro"
+      sleep 3s
+      tput cuu1
+      tput dl1
+      tput cuu1
+      tput dl1
+      ;;
+    20)
+      msg -verm "No usar mismo user como pass y misma cantidad de caracteres "
+      sleep 2s
+      tput cuu1
+      tput dl1
+      tput cuu1
+      tput dl1
+      ;;
+    esac
+  }
 #tls="$(cat ~/log-install.txt | grep -w "Vmess TLS" | cut -d: -f2|sed 's/ //g')"
 #none="$(cat ~/log-install.txt | grep -w "Vmess None TLS" | cut -d: -f2|sed 's/ //g')"
 until [[ $user =~ ^[a-zA-Z0-9_]+$ && ${CLIENT_EXISTS} == '0' ]]; do
 echo -e "$COLOR1┌─────────────────────────────────────────────────┐${NC}"
-echo -e "$COLOR1 ${NC} ${COLBG1}            ${WH}• CREAR USUARIO VMESS•              ${NC} $COLOR1 $NC"
+echo -e "$COLOR1 ${NC} ${COLBG1}            ${WH}• CREAR USUARIO VMESS •              ${NC} $COLOR1 $NC"
 echo -e "$COLOR1└─────────────────────────────────────────────────┘${NC}"
 
-		while [[ -z $user ]]; do
-    echo -e "$COLOR1┌─────────────────────────────────────────────────┐${NC}"
-    echo -e "$COLOR1 ${NC} ${COLBG1}            ${WH}• CREAR USUARIO VMESS •              ${NC} $COLOR1 $NC"
-    echo -e "$COLOR1└─────────────────────────────────────────────────┘${NC}"
+		#read -rp "Usuario: " -e user
+                while true; do
+        echo -ne "\e[1;93mDigite Nuevo Usuario: \e[1;32m" && read user
+        user="$(echo $user | sed -e 's/[^a-z0-9 -]//ig')"
+        if [[ -z $user ]]; then
+          err_fun 1 && menu
+        elif [[ "${#user}" -lt "5" ]]; then
+          err_fun 2 && continue
+        elif [[ "${#user}" -gt "20" ]]; then
+          err_fun 3 && continue
 
-    echo ""
-    echo "El campo usuario está vacío."
-    echo ""
-    echo -e "$COLOR1━━━━━━━━━━━━━━━━━$NC"
-    read -n 1 -s -r -p "Presiona una tecla para ir al menú"
-    menu
-done
-  
+        fi
+        break
+      done
 		CLIENT_EXISTS=$(grep -w $user /etc/xray/config.json | wc -l)
 
 		if [[ ${CLIENT_EXISTS} == '1' ]]; then
