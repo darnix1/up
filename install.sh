@@ -37,7 +37,7 @@ fi
 dan_fun() {
     case $1 in
     1)
-      msg -verm "Usuario Nulo"
+      echo -e "\e[1;37;41m\nUsa Solo Letras Pendejo\e[0m"
       sleep 2s
       tput cuu1
       tput dl1
@@ -45,7 +45,7 @@ dan_fun() {
       tput dl1
       ;;
     2)
-      echo -e "\e[1;37;41mMinimo 2 Letras\e[0m"
+      echo -e "\e[1;37;41m\nMinimo 2 Letras\e[0m"
       sleep 2s
       tput cuu1
       tput dl1
@@ -53,7 +53,7 @@ dan_fun() {
       tput dl1
       ;;
     3)
-      echo -e "\e[1;37;41mMaximo 5 Letras\e[0m"
+      echo -e "\e[1;37;41m\nMaximo 5 Letras\e[0m"
       sleep 2s
       tput cuu1
       tput dl1
@@ -93,7 +93,7 @@ dan_fun() {
       tput dl1
       ;;
     8)
-      echo -e "\e[1;37;41mUsa solo numeros\e[0m"
+      echo -e "\e[1;37;41m\nUsa solo numeros\e[0m"
       sleep 2s
       tput cuu1
       tput dl1
@@ -101,7 +101,7 @@ dan_fun() {
       tput dl1
       ;;
     9)
-      echo -e "\e[1;37;41mDuracion maxima 360 dias\e[0m"
+      echo -e "\e[1;37;41m\nDuracion maxima 360 dias\e[0m"
       sleep 2s
       tput cuu1
       tput dl1
@@ -157,7 +157,7 @@ dan_fun() {
       tput dl1
       ;;
     17)
-      echo -e "\e[1;37;41mNo se recibio ninguna informacion\e[0m"
+      echo -e "\e[1;37;41m\nNo se recibio ninguna informacion\e[0m"
       sleep 4s
       tput cuu1
       tput dl1
@@ -185,6 +185,8 @@ echo -e "$COLOR1└────────────────────�
         dan_fun 2 && continue
       elif [[ "${#user}" -gt "6" ]]; then
         dan_fun 3 && continue
+      elif [[ "${#user}" -gt "6" ]]; then
+        dan_fun 1 && continue
       fi
       break
     done
