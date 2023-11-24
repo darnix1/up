@@ -193,7 +193,7 @@ echo -e "$COLOR1 ${NC} ${COLBG1}            ${WH}• CREAR USUARIO SSH •      
 echo -e "$COLOR1└─────────────────────────────────────────────────┘${NC}"
 
 while true; do
-        echo -ne "Agrega Nuevo Usuario" && read Login
+        echo -ne "Agregar Nuevo Usuario: " && read Login
         Login="$(echo $Login | sed -e 's/[^a-z0-9 -]//ig')"
         if [[ -z $Login ]]; then
           err_fun 1 && continue
