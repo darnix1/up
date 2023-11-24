@@ -196,7 +196,7 @@ while true; do
         echo -ne "Agrega Nuevo Usuario" && read Login
         Login="$(echo $Login | sed -e 's/[^a-z0-9 -]//ig')"
         if [[ -z $Login ]]; then
-          err_fun 1 && controlador_ssh
+          err_fun 1 && continue
         elif [[ "${#Login}" -lt "5" ]]; then
           err_fun 2 && continue
         elif [[ "${#Login}" -gt "20" ]]; then
