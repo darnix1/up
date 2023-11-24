@@ -43,10 +43,20 @@ echo -e "$COLOR1┌────────────────────�
 echo -e "$COLOR1 ${NC} ${COLBG1}            ${WH}• CREAR USUARIO VMESS •              ${NC} $COLOR1 $NC"
 echo -e "$COLOR1└─────────────────────────────────────────────────┘${NC}"
 
-		read -rp "Usuario: " -e user
+read -rp "Usuario: " -e user
 
 if [[ -z $user ]]; then
     echo -e "\nNombre de Usuario vacío o inválido\n"
+    read -rp "¿Desea reintentar? (S/N): " -n 1 -r respuesta
+    echo  # Nueva línea después de la entrada del usuario
+
+    if [[ $respuesta =~ ^[Ss]$ ]]; then
+        echo "addws"
+    elif [[ $respuesta =~ ^[Nn]$ ]]; then
+        echo "m-vmess"
+    else
+        echo -e "\nRespuesta no válida. Por favor, ingrese S o N.\n"
+    fi
 else
     read -rp "¿Desea reintentar? (S/N): " -n 1 -r respuesta
     echo  # Nueva línea después de la entrada del usuario
@@ -59,6 +69,7 @@ else
         echo -e "\nRespuesta no válida. Por favor, ingrese S o N.\n"
     fi
 fi
+
 
 		CLIENT_EXISTS=$(grep -w $user /etc/xray/config.json | wc -l)
 
