@@ -56,6 +56,7 @@ clear
 			read -n 1 -s -r -p "Presiona una tecla para ir al menu"
       menu
       fi
+      done 
   
 		CLIENT_EXISTS=$(grep -w $user /etc/xray/config.json | wc -l)
 
