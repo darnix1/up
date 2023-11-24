@@ -51,9 +51,9 @@ if [[ -z $user ]]; then
         echo  # Nueva línea después de la entrada del usuario
 
         if [[ $respuesta =~ ^[Ss]$ ]]; then
-            continue  # Volver a solicitar el nombre de usuario
+            addws
         elif [[ $respuesta =~ ^[Nn]$ ]]; then
-            echo "m-vmess"
+            m-vmess
             break  # Salir del bucle
         else
             echo -e "\nRespuesta no válida. Por favor, ingrese S o N.\n"
