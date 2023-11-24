@@ -58,7 +58,7 @@ if [[ -z $user ]]; then
         else
             echo -e "\nRespuesta no válida. Por favor, ingrese S o N.\n"
         fi
-    done
+    
 
 
 
