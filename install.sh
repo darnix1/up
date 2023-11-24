@@ -185,7 +185,7 @@ echo -e "$COLOR1└────────────────────�
         dan_fun 2 && continue
       elif [[ "${#user}" -gt "6" ]]; then
         dan_fun 3 && continue
-      elif [[ "${#user}" -gt "6" ]]; then
+      elif [[ "$user" =~ [0-9] ]]; then
         dan_fun 1 && continue
       fi
       break
