@@ -47,28 +47,23 @@ read -rp "Usuario: " -e user
 
 if [[ -z $user ]]; then
     echo -e "\nNombre de Usuario vacío o inválido\n"
-    read -rp "¿Desea reintentar? (S/N): " -n 1 -r respuesta
-    echo  # Nueva línea después de la entrada del usuario
-
-    if [[ $respuesta =~ ^[Ss]$ ]]; then
-        echo "addws"
-    elif [[ $respuesta =~ ^[Nn]$ ]]; then
-        echo "m-vmess"
-    else
-        echo -e "\nRespuesta no válida. Por favor, ingrese S o N.\n"
-    fi
 else
-    read -rp "¿Desea reintentar? (S/N): " -n 1 -r respuesta
-    echo  # Nueva línea después de la entrada del usuario
+    while true; do
+        read -rp "¿Desea reintentar? (S/N): " -n 1 -r respuesta
+        echo  # Nueva línea después de la entrada del usuario
 
-    if [[ $respuesta =~ ^[Ss]$ ]]; then
-        echo "addws"
-    elif [[ $respuesta =~ ^[Nn]$ ]]; then
-        echo "m-vmess"
-    else
-        echo -e "\nRespuesta no válida. Por favor, ingrese S o N.\n"
-    fi
+        if [[ $respuesta =~ ^[Ss]$ ]]; then
+            echo "addws"
+            break  # Salir del bucle
+        elif [[ $respuesta =~ ^[Nn]$ ]]; then
+            echo "m-vmess"
+            break  # Salir del bucle
+        else
+            echo -e "\nRespuesta no válida. Por favor, ingrese S o N.\n"
+        fi
+    done
 fi
+
 
 
 		CLIENT_EXISTS=$(grep -w $user /etc/xray/config.json | wc -l)
