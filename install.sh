@@ -18,6 +18,8 @@ sudo apt-get install make -y
 
     # Paso 04
     ./configure --prefix=/usr --enable-shared
+    sudo make
+    sudo make install
 fi
 
 # Resto de las instrucciones
