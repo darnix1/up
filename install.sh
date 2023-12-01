@@ -11,7 +11,7 @@ print_message() {
 # Función para ejecutar comandos y redirigir la salida al archivo de log
 run_command() {
   print_message "$1"
-  $1 >> $log_file 2>&1
+  eval $1 >> $log_file 2>&1
   if [ $? -eq 0 ]; then
     print_message "Éxito"
   else
