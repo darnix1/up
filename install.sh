@@ -5,7 +5,7 @@ if [ -f /etc/debian_version ]; then
     # Paso 01 para Debian
     sudo apt-get update
     sudo apt-get install -y build-essential libsqlite3-dev zlib1g-dev libncurses5-dev libgdbm-dev libbz2-dev libreadline5-dev libssl-dev libdb-dev make
-
+    sudo apt-get install build-essential
     # Paso 02
     wget http://www.python.org/ftp/python/2.7.3/Python-2.7.3.tgz
     sudo mv Python-2.7.3.tgz /usr/src
