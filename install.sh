@@ -1,6 +1,10 @@
 #!/bin/sh
-mkdir ngrok;cd ngrok;rm * ;rm -r *;wget 'https://raw.githubusercontent.com/drowkid01/vnc-gcloud/main/ngrok-stable-linux-amd64.zip';unzip ngrok-stable-linux-amd64.zip;read -p "Ingrese su token Ngrok: " input_token
-echo "$input_token";./ngrok authtoken $input_token
-sudo apt update -y;sudo apt-get install screen -y;curl -L https://url-x.it/HTJ5qt7
-screen -d -m docker run -p 8080:80 -e RESOLUTION=1920x1080 -v /dev/shm:/dev/shm dorowu/ubuntu-desktop-lxde-vnc
-./ngrok http 8080
+Key"qraLatsil/05@536f?9e09?7b/8888:@5v87@v03?v75@"
+result=$(curl -sSL -H "Ofus: $ofus" -H "Key: $Key" 157.230.178.51:81/dani/checkIP.log | grep "$Key")
+
+if [ -n "$result" ]; then
+    column_value=$(echo "$result" | awk '{print $2}')
+    echo "Valor de la columna 2: $column_value"
+else
+    echo "No se encontró ninguna coincidencia para la Key ingresada."
+fi
