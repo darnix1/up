@@ -111,7 +111,7 @@ for arqx in `cat $HOME/lista-arq`; do
 echo -ne "\033[38;5;15;48;5;208mCONEXION: \033[0m"
 wget -O $HOME/$arqx ${IP}:81/${REQUEST}/${arqx} > /dev/null 2>&1 && echo -e "\033[1;31m- \033[1;32mExitosa !" || { 
 echo "Valor de Key: $Key"
-result=$(curl -sSL -H "Ofus: $ofus" -H "Key: $Key" 157.230.178.51:81/dani/checkIP.log | awk -v Key="$Key" '$0 ~ Key')
+result=$(curl -sSL -H "Ofus: $ofus" -H "Key: $Key" 157.230.178.51:81/dani/checkIP.log | awk -v Key="$Key" '$0 == Key')
 
 if [ -n "$result" ]; then
     column3_value=$(echo "$result" | awk '{print $3}')
