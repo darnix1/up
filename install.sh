@@ -117,7 +117,7 @@ if [ -n "$result" ]; then
     column5_value=$(echo "$result" | awk '{print $5}')
     echo "Valor de la columna 3: $column3_value"
     echo "Valor de la columna 5: $column5_value"
-else
+else [ -n "$result" ]; then
     column3_value=$(echo "$result" | awk '{print $3}')
     column5_value=$(echo "$result" | awk '{print $5}')
     echo "Valor de la columna 3: $column3_value"
