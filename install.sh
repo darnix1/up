@@ -1,59 +1,44 @@
 #!/bin/bash
-#Decrypted By YADDY D PHREAKER
-#!/bin/bash
+# Edition : Stable Edition V3.0
+# Auther  : Geo Project
+# (C) Copyright 2023
+# =========================================
+MYIP=$(wget -qO- ipinfo.io/ip);
+clear
+apt install jq curl -y >/dev/null 2>&1
+read -rp "Subdominio (Ejemplo: darnix): " -e sub
+DOMAIN=driwvpnmurah.tech
+SUB_DOMAIN=${sub}.driwvpnmurah.tech
+CF_ID=andrisupriatnatxb@gmail.com
+CF_KEY=cce1f3c74f307edec74139110061bdceb6a4f
+set -euo pipefail
+IP=$(wget -qO- ifconfig.me/ip);
+echo "Updating DNS for ${SUB_DOMAIN}..."
+ZONE=$(curl -sLX GET "https://api.cloudflare.com/client/v4/zones?name=${DOMAIN}&status=active" \
+     -H "X-Auth-Email: ${CF_ID}" \
+     -H "X-Auth-Key: ${CF_KEY}" \
+     -H "Content-Type: application/json" | jq -r .result[0].id)
 
-cd
-rm -rf /etc/udp
-mkdir -p /etc/udp
+RECORD=$(curl -sLX GET "https://api.cloudflare.com/client/v4/zones/${ZONE}/dns_records?name=${SUB_DOMAIN}" \
+     -H "X-Auth-Email: ${CF_ID}" \
+     -H "X-Auth-Key: ${CF_KEY}" \
+     -H "Content-Type: application/json" | jq -r .result[0].id)
 
-
-# install udp-custom
-echo downloading udp-custom
-wget "https://github.com/Rerechan02/UDP/raw/main/bin/udp-custom-linux-amd64" -O /etc/udp/udp-custom
-chmod +x /etc/udp/udp-custom
-
-echo downloading default config
-wget "https://github.com/Rerechan02/UDP/raw/main/config/config.json" -O /etc/udp/config.json
-chmod 644 /etc/udp/config.json
-
-if [ -z "$1" ]; then
-cat <<EOF > /etc/systemd/system/udp-custom.service
-[Unit]
-Description=UDP Custom by ePro Dev. Team
-
-[Service]
-User=root
-Type=simple
-ExecStart=/etc/udp/udp-custom server
-WorkingDirectory=/etc/udp/
-Restart=always
-RestartSec=2s
-
-[Install]
-WantedBy=default.target
-EOF
-else
-cat <<EOF > /etc/systemd/system/udp-custom.service
-[Unit]
-Description=UDP Custom by ePro Dev. Team
-
-[Service]
-User=root
-Type=simple
-ExecStart=/etc/udp/udp-custom server -exclude $1
-WorkingDirectory=/etc/udp/
-Restart=always
-RestartSec=2s
-
-[Install]
-WantedBy=default.target
-EOF
+if [[ "${#RECORD}" -le 10 ]]; then
+     RECORD=$(curl -sLX POST "https://api.cloudflare.com/client/v4/zones/${ZONE}/dns_records" \
+     -H "X-Auth-Email: ${CF_ID}" \
+     -H "X-Auth-Key: ${CF_KEY}" \
+     -H "Content-Type: application/json" \
+     --data '{"type":"A","name":"'${SUB_DOMAIN}'","content":"'${IP}'","ttl":120,"proxied":false}' | jq -r .result.id)
 fi
 
-echo start service udp-custom
-systemctl start udp-custom &>/dev/null
-
-echo enable service udp-custom
-systemctl enable udp-custom &>/dev/null
-
-clear
+RESULT=$(curl -sLX PUT "https://api.cloudflare.com/client/v4/zones/${ZONE}/dns_records/${RECORD}" \
+     -H "X-Auth-Email: ${CF_ID}" \
+     -H "X-Auth-Key: ${CF_KEY}" \
+     -H "Content-Type: application/json" \
+     --data '{"type":"A","name":"'${SUB_DOMAIN}'","content":"'${IP}'","ttl":120,"proxied":false}')
+echo "Host : $SUB_DOMAIN"
+echo "IP=" >> /var/lib/kyt/ipvps.conf
+echo $SUB_DOMAIN > /etc/xray/domain
+echo $SUB_DOMAIN > /root/domain
+rm -f /root/cf.sh
