@@ -1,39 +1,39 @@
 #!/bin/bash
-# =========================================
-MYIP=$(wget -qO- ipinfo.io/ip);
-clear
-apt install jq curl -y >/dev/null 2>&1
-read -rp "Subdominio (Ejemplo: darnix): " -e sub
-DOMAIN=driwvpnmurah.tech
-SUB_DOMAIN=${sub}.driwvpnmurah.tech
-CF_ID=andrisupriatnatxb@gmail.com
-CF_KEY=cce1f3c74f307edec74139110061bdceb6a4f
-set -euo pipefail
-IP=$(wget -qO- ifconfig.me/ip);
-echo "Updating DNS for ${SUB_DOMAIN}..."
-ZONE=$(curl -sLX GET "https://api.cloudflare.com/client/v4/zones?name=${DOMAIN}&status=active" \
-     -H "X-Auth-Email: ${CF_ID}" \
-     -H "X-Auth-Key: ${CF_KEY}" \
-     -H "Content-Type: application/json" | jq -r .result[0].id)
-
-RECORD=$(curl -sLX GET "https://api.cloudflare.com/client/v4/zones/${ZONE}/dns_records?name=${SUB_DOMAIN}" \
-     -H "X-Auth-Email: ${CF_ID}" \
-     -H "X-Auth-Key: ${CF_KEY}" \
-     -H "Content-Type: application/json" | jq -r .result[0].id)
-
-if [[ "${#RECORD}" -le 10 ]]; then
-     RECORD=$(curl -sLX POST "https://api.cloudflare.com/client/v4/zones/${ZONE}/dns_records" \
-     -H "X-Auth-Email: ${CF_ID}" \
-     -H "X-Auth-Key: ${CF_KEY}" \
-     -H "Content-Type: application/json" \
-     --data '{"type":"A","name":"'${SUB_DOMAIN}'","content":"'${IP}'","ttl":120,"proxied":false}' | jq -r .result.id)
-fi
-
-RESULT=$(curl -sLX PUT "https://api.cloudflare.com/client/v4/zones/${ZONE}/dns_records/${RECORD}" \
-     -H "X-Auth-Email: ${CF_ID}" \
-     -H "X-Auth-Key: ${CF_KEY}" \
-     -H "Content-Type: application/json" \
-     --data '{"type":"A","name":"'${SUB_DOMAIN}'","content":"'${IP}'","ttl":120,"proxied":false}')
-echo "Host : $SUB_DOMAIN"
-echo "IP= $IP"
-rm -f /root/cf.sh
+red="\e[1;31m";black="\e[1;30m";ver="\e[1;32m";yell="\e[1;33m"
+[[ ! -e "$PREFIX/bin/encrypt" ]] && cp $(pwd)/$0 $PREFIX/bin/encrypt
+encrypt(){
+file=$1;nfile=$2;files="$file $nfile"
+	for archz in $files; do
+	[[ ! -z $archz ]] || exit 1
+	done
+[[ -e $file ]] || echo -e "${red}file no existe"
+[[ -e $nfile ]] && echo -e "${red}ya existe un archivo con el nombre: ${yell}$nfile"
+	function capauno (
+	cat $file | base64 > .file
+	cat .file | base32 > .filE
+	cat .filE | basenc --base16 > .file
+	rm .filE
+	)
+	function capados {
+	[[ ! -e ".file" ]] && ( exit 1 ; )
+	gzip .file;xz .file.gz;bzip2 .file.gz.xz;mv .file.gz.xz.bz2 $nfile;chmod +x $nfile
+	}
+[[ ! -z $file ]] && capauno;capados;echo -e "${ver}[✓] archivo: ${yell}$nfile${ver} encriptado [✓]"
+}
+decrypt(){
+file=$1;nfile=$2;files="$file $nfile"
+	for check in $files; do
+	[[ ! -z $check ]] || exit 1
+	done
+[[ -e $file ]] || echo -e "${red}file no existe"
+[[ -e $nfile ]] && echo -e "${red}ya existe un archivo con el nombre: ${yell}$nfile"
+ function decrypt_work
+ {
+ cat $file | bzip2 -cd | xz -cd | gzip -cd | basenc --base16 -d | base32 -d | base64 -d > $nfile
+ echo -e "${ver}[✓] archivo: ${yell}$nfile ${ver}desencriptado exitosamente [✓]" 
+ }
+decrypt_work
+}
+[[ $1 = "-e" ]] && encrypt $2 $3
+[[ $1 = "-d" ]] && decrypt $2 $3
+[[ $1 = @(*|"") ]] && exit 1
